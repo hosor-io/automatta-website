@@ -1,286 +1,342 @@
 "use client";
 import React from "react";
 import {
-  Search, Star, MapPin, Check, ChevronRight, Plus, MessageSquare,
-  Navigation, FileText, Clock, Wrench, Truck, Calendar, CreditCard,
-  QrCode, ShoppingBag, ChefHat, Package, RefreshCw, Leaf, Users,
-  Bell, PieChart, Scale, Download, ShoppingCart, Video, Lock,
-  Dumbbell, TrendingUp, Trophy, BookOpen, Phone, ArrowLeft,
-  Stethoscope, PawPrint, Banknote, BarChart2, AlertCircle, CheckCircle,
+  Search, Check, ChevronRight, Plus, MessageSquare,
+  Navigation, Clock, Wrench, Truck, Calendar,
+  QrCode, ShoppingBag, Package, RefreshCw, Leaf, Users,
+  Bell, Scale, ShoppingCart, Video, Lock,
+  Dumbbell, TrendingUp, Trophy, ArrowLeft,
+  Stethoscope, PawPrint, MapPin, Star, Phone, CreditCard,
+  Zap, BarChart3, CheckCircle2, Heart, BookOpen,
 } from "lucide-react";
 
-// ─── UTILITY ───────────────────────────────────────────────
-const AppBar = ({ title, action }: { title: string; action?: React.ReactNode }) => (
-  <div className="bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
-    <div className="flex items-center gap-2">
-      <ArrowLeft size={14} className="text-gray-400" />
-      <span className="text-sm font-semibold text-gray-900">{title}</span>
+// ─── SHARED PRIMITIVES ─────────────────────────────────────
+
+const GradientHeader = ({
+  title,
+  subtitle,
+  grad,
+  icon,
+}: {
+  title: string;
+  subtitle?: string;
+  grad: string;
+  icon?: React.ReactNode;
+}) => (
+  <div className={`${grad} px-4 pt-4 pb-5`}>
+    <div className="flex items-center gap-2 mb-1">
+      {icon && <div className="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center text-white">{icon}</div>}
+      <span className="text-white font-bold text-sm">{title}</span>
     </div>
-    {action}
+    {subtitle && <p className="text-white/70 text-[10px]">{subtitle}</p>}
   </div>
 );
 
-const Pill = ({ label, active }: { label: string; active?: boolean }) => (
-  <span className={`px-3 py-1 rounded-full text-xs font-medium shrink-0 ${active ? "bg-violet-600 text-white" : "bg-white text-gray-600 border border-gray-200"}`}>
-    {label}
-  </span>
-);
-
-const Avatar = ({ name, color = "bg-violet-100 text-violet-700" }: { name: string; color?: string }) => (
-  <div className={`w-9 h-9 rounded-full ${color} flex items-center justify-center text-sm font-bold shrink-0`}>{name[0]}</div>
-);
-
-const RatingRow = ({ rating, count }: { rating: string; count?: string }) => (
-  <div className="flex items-center gap-1">
-    <span className="text-yellow-400 text-xs">★★★★★</span>
-    <span className="text-xs text-gray-600 font-medium">{rating}</span>
-    {count && <span className="text-xs text-gray-400">({count})</span>}
-  </div>
-);
-
-const StatusBadge = ({ label, color }: { label: string; color: string }) => (
-  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${color}`}>{label}</span>
-);
-
-const BottomBar = ({ items }: { items: { icon: React.ReactNode; label: string; active?: boolean }[] }) => (
-  <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex">
+const NavBar = ({ items }: { items: { icon: React.ReactNode; label: string; active?: boolean; color?: string }[] }) => (
+  <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex pb-1">
     {items.map((item) => (
-      <button key={item.label} className={`flex-1 flex flex-col items-center py-2 gap-0.5 ${item.active ? "text-violet-600" : "text-gray-400"}`}>
+      <button key={item.label} className={`flex-1 flex flex-col items-center pt-2 pb-1 gap-0.5 ${item.active ? (item.color || "text-violet-600") : "text-gray-300"}`}>
         {item.icon}
-        <span className="text-[9px]">{item.label}</span>
+        <span className="text-[8px] font-medium">{item.label}</span>
       </button>
     ))}
   </div>
 );
 
+const StatCard = ({ label, value, sub, bg, text }: { label: string; value: string; sub?: string; bg: string; text: string }) => (
+  <div className={`${bg} rounded-2xl p-3 flex-1`}>
+    <div className={`text-[10px] ${text} opacity-70 mb-0.5`}>{label}</div>
+    <div className={`text-base font-bold ${text}`}>{value}</div>
+    {sub && <div className={`text-[9px] ${text} opacity-60`}>{sub}</div>}
+  </div>
+);
+
+const AvatarCircle = ({ initials, bg }: { initials: string; bg: string }) => (
+  <div className={`w-9 h-9 rounded-full ${bg} flex items-center justify-center text-sm font-bold text-white shrink-0`}>{initials}</div>
+);
+
+const Chip = ({ label, active, color }: { label: string; active?: boolean; color?: string }) => (
+  <span className={`px-3 py-1 rounded-full text-[10px] font-semibold shrink-0 ${active ? (color || "bg-violet-600 text-white") : "bg-gray-100 text-gray-500"}`}>{label}</span>
+);
+
+const Tag = ({ label, color }: { label: string; color: string }) => (
+  <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${color}`}>{label}</span>
+);
+
+const Stars = () => <span className="text-amber-400 text-[10px]">★★★★★</span>;
+
 // ─── STYLEGO ───────────────────────────────────────────────
+
 export const StyleGoS1: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="StyleGo" />
-    <div className="px-3 py-2 bg-white border-b border-gray-100">
-      <div className="bg-gray-100 rounded-xl flex items-center gap-2 px-3 py-2">
-        <Search size={12} className="text-gray-400 shrink-0" />
-        <span className="text-xs text-gray-400">Hair, nails, makeup...</span>
+  <div className="h-full flex flex-col bg-[#F8F5FF] relative">
+    <div className="bg-gradient-to-r from-violet-600 to-purple-500 px-4 pt-4 pb-6">
+      <div className="flex items-center justify-between mb-3">
+        <div>
+          <div className="text-white font-bold text-base">StyleGo</div>
+          <div className="text-violet-200 text-[10px]">Stylists near you</div>
+        </div>
+        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+          <MapPin size={14} className="text-white" />
+        </div>
+      </div>
+      <div className="bg-white rounded-xl flex items-center gap-2 px-3 py-2.5 shadow-sm">
+        <Search size={12} className="text-violet-400" />
+        <span className="text-[11px] text-gray-400">Hair, nails, makeup…</span>
       </div>
     </div>
-    <div className="flex gap-2 px-3 py-2 overflow-hidden">
-      {["All", "Hair", "Nails", "Barber"].map((c, i) => <Pill key={c} label={c} active={i === 0} />)}
+    <div className="flex gap-2 px-4 py-2 -mt-3 overflow-hidden">
+      {["All","Hair","Nails","Barber"].map((c,i)=><Chip key={c} label={c} active={i===0}/>)}
     </div>
-    <div className="flex-1 px-3 space-y-2 overflow-hidden pb-14">
+    <div className="flex-1 px-4 space-y-2 overflow-hidden pb-14 mt-1">
       {[
-        { name: "Sofia M.", spec: "Hair & Color", rating: "4.9", dist: "0.8 km", price: "$35", color: "bg-violet-100 text-violet-700" },
-        { name: "Carlos R.", spec: "Barbershop", rating: "4.8", dist: "1.2 km", price: "$25", color: "bg-blue-100 text-blue-700" },
-        { name: "Ana L.", spec: "Nail Art", rating: "4.7", dist: "2.1 km", price: "$28", color: "bg-pink-100 text-pink-700" },
-      ].map((s) => (
-        <div key={s.name} className="bg-white rounded-xl p-3 flex items-center gap-3 border border-gray-100 shadow-sm">
-          <Avatar name={s.name} color={s.color} />
+        {name:"Sofia M.",spec:"Hair & Color",r:"4.9",d:"0.8km",p:"$35",bg:"bg-violet-500",avail:true},
+        {name:"Carlos R.",spec:"Barbershop",r:"4.8",d:"1.2km",p:"$25",bg:"bg-blue-500",avail:true},
+        {name:"Ana L.",spec:"Nail Art",r:"4.7",d:"2.1km",p:"$28",bg:"bg-pink-500",avail:false},
+      ].map(s=>(
+        <div key={s.name} className="bg-white rounded-2xl px-3 py-3 flex items-center gap-3 shadow-sm">
+          <AvatarCircle initials={s.name[0]} bg={s.bg} />
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-semibold text-gray-900">{s.name}</div>
-            <div className="text-xs text-gray-500">{s.spec}</div>
-            <div className="flex items-center gap-1 mt-0.5">
-              <span className="text-yellow-400 text-xs">★</span>
-              <span className="text-xs text-gray-500">{s.rating}</span>
-              <span className="text-xs text-gray-300">·</span>
-              <span className="text-xs text-gray-400">{s.dist}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-bold text-gray-900">{s.name}</span>
+              {s.avail && <span className="w-1.5 h-1.5 rounded-full bg-green-400 shrink-0"/>}
             </div>
+            <div className="text-[10px] text-gray-400">{s.spec} · {s.d}</div>
+            <div className="flex items-center gap-1 mt-0.5"><Stars/><span className="text-[10px] text-gray-500 font-medium">{s.r}</span></div>
           </div>
-          <div className="text-xs font-bold text-violet-600 shrink-0">{s.price}</div>
+          <div className="text-right shrink-0">
+            <div className="text-sm font-bold text-violet-600">{s.p}</div>
+            <div className="text-[9px] text-gray-400">/ session</div>
+          </div>
         </div>
       ))}
     </div>
-    <BottomBar items={[{ icon: <Search size={14} />, label: "Explore", active: true }, { icon: <Calendar size={14} />, label: "Bookings" }, { icon: <MessageSquare size={14} />, label: "Chat" }, { icon: <Users size={14} />, label: "Profile" }]} />
+    <NavBar items={[{icon:<Search size={14}/>,label:"Explore",active:true},{icon:<Calendar size={14}/>,label:"Bookings"},{icon:<MessageSquare size={14}/>,label:"Chat"},{icon:<Users size={14}/>,label:"Profile"}]}/>
   </div>
 );
 
 export const StyleGoS2: React.FC = () => (
   <div className="h-full flex flex-col bg-white">
-    <AppBar title="Stylist Profile" />
-    <div className="flex flex-col items-center px-4 pt-4 pb-3 border-b border-gray-100">
-      <div className="w-16 h-16 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center text-2xl font-bold mb-2">S</div>
-      <div className="text-sm font-bold text-gray-900">Sofia Martinez</div>
-      <div className="text-xs text-gray-500 mb-1">Hair & Color Specialist</div>
-      <RatingRow rating="4.9" count="142 reviews" />
-      <div className="flex items-center gap-1 mt-1">
-        <MapPin size={10} className="text-gray-400" />
-        <span className="text-xs text-gray-400">0.8 km away · Available now</span>
+    <div className="bg-gradient-to-br from-violet-600 via-purple-600 to-pink-500 px-4 pt-4 pb-8">
+      <div className="flex items-center gap-2 mb-3">
+        <ArrowLeft size={14} className="text-white/70" />
+        <span className="text-white/70 text-xs">Back</span>
+      </div>
+      <div className="flex items-center gap-3">
+        <div className="w-14 h-14 rounded-2xl bg-white/20 text-white flex items-center justify-center text-2xl font-bold border border-white/30">S</div>
+        <div>
+          <div className="text-white font-bold text-sm">Sofia Martinez</div>
+          <div className="text-white/70 text-[10px]">Hair & Color Specialist</div>
+          <div className="flex items-center gap-1 mt-0.5"><Stars/><span className="text-white text-[10px] font-semibold">4.9</span><span className="text-white/60 text-[10px]">(142)</span></div>
+        </div>
       </div>
     </div>
-    <div className="flex-1 px-4 py-3 space-y-2 overflow-hidden">
-      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Services</div>
-      {[
-        { service: "Haircut", price: "$35", time: "45 min" },
-        { service: "Color", price: "$75", time: "2 hrs" },
-        { service: "Treatment", price: "$55", time: "1 hr" },
-      ].map((s) => (
-        <div key={s.service} className="flex items-center justify-between py-2 border-b border-gray-50">
+    <div className="flex gap-3 px-4 -mt-4 mb-3">
+      <div className="flex-1 bg-white rounded-xl shadow-md p-2 text-center border border-gray-100">
+        <div className="text-sm font-bold text-violet-600">4.9</div>
+        <div className="text-[9px] text-gray-400">Rating</div>
+      </div>
+      <div className="flex-1 bg-white rounded-xl shadow-md p-2 text-center border border-gray-100">
+        <div className="text-sm font-bold text-gray-900">142</div>
+        <div className="text-[9px] text-gray-400">Reviews</div>
+      </div>
+      <div className="flex-1 bg-white rounded-xl shadow-md p-2 text-center border border-gray-100">
+        <div className="text-sm font-bold text-green-600">Now</div>
+        <div className="text-[9px] text-gray-400">Available</div>
+      </div>
+    </div>
+    <div className="flex-1 px-4 space-y-2 overflow-hidden">
+      <div className="text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-1">Services</div>
+      {[{s:"Haircut",t:"45 min",p:"$35",color:"bg-violet-50 border-violet-100"},{s:"Color",t:"2 hrs",p:"$75",color:"bg-purple-50 border-purple-100"},{s:"Treatment",t:"1 hr",p:"$55",color:"bg-pink-50 border-pink-100"}].map(sv=>(
+        <div key={sv.s} className={`flex items-center justify-between px-3 py-2.5 rounded-xl border ${sv.color}`}>
           <div>
-            <div className="text-xs font-medium text-gray-900">{s.service}</div>
-            <div className="text-xs text-gray-400">{s.time}</div>
+            <div className="text-xs font-semibold text-gray-900">{sv.s}</div>
+            <div className="text-[10px] text-gray-400">{sv.t}</div>
           </div>
-          <div className="text-xs font-bold text-gray-900">{s.price}</div>
+          <div className="text-sm font-bold text-gray-900">{sv.p}</div>
         </div>
       ))}
     </div>
-    <div className="px-4 pb-4">
-      <button className="w-full py-3 rounded-xl bg-violet-600 text-white text-xs font-semibold">Book Now</button>
+    <div className="px-4 pb-4 pt-2">
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-500 text-white text-xs font-bold shadow-lg shadow-violet-200">Book Now →</button>
     </div>
   </div>
 );
 
 export const StyleGoS3: React.FC = () => (
-  <div className="h-full flex flex-col bg-white items-center px-4 pt-6 pb-4">
-    <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-3">
-      <CheckCircle size={28} className="text-green-500" />
+  <div className="h-full flex flex-col bg-white">
+    <div className="bg-gradient-to-br from-green-500 to-emerald-600 px-4 pt-6 pb-8 flex flex-col items-center">
+      <div className="w-14 h-14 rounded-full bg-white/20 border-2 border-white/50 flex items-center justify-center mb-2">
+        <CheckCircle2 size={28} className="text-white" />
+      </div>
+      <div className="text-white font-bold text-base">Booking Confirmed!</div>
+      <div className="text-white/70 text-[10px] text-center mt-1">Sofia will come to you. Get ready!</div>
     </div>
-    <div className="text-sm font-bold text-gray-900 mb-1">Booking Confirmed!</div>
-    <div className="text-xs text-gray-500 mb-5 text-center">You're all set. Sofia will come to you.</div>
-    <div className="w-full bg-gray-50 rounded-2xl p-4 space-y-3 border border-gray-100">
-      {[
-        { label: "Stylist", value: "Sofia Martinez" },
-        { label: "Service", value: "Haircut · $35" },
-        { label: "Date", value: "Friday, Jun 6" },
-        { label: "Time", value: "11:00 AM" },
-        { label: "Location", value: "Your address" },
-      ].map((item) => (
-        <div key={item.label} className="flex justify-between items-center">
-          <span className="text-xs text-gray-400">{item.label}</span>
-          <span className="text-xs font-medium text-gray-900">{item.value}</span>
-        </div>
-      ))}
-    </div>
-    <div className="mt-4 w-full space-y-2">
-      <button className="w-full py-3 rounded-xl bg-violet-600 text-white text-xs font-semibold">View in Maps</button>
-      <button className="w-full py-3 rounded-xl border border-gray-200 text-gray-700 text-xs font-medium">Message Sofia</button>
+    <div className="flex-1 px-4 -mt-3">
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 mb-3 space-y-2.5">
+        {[{l:"Stylist",v:"Sofia Martinez"},{l:"Service",v:"Haircut · $35"},{l:"Date",v:"Friday, Jun 6"},{l:"Time",v:"11:00 AM"},{l:"Location",v:"Your address"}].map(i=>(
+          <div key={i.l} className="flex justify-between">
+            <span className="text-[10px] text-gray-400">{i.l}</span>
+            <span className="text-[10px] font-semibold text-gray-900">{i.v}</span>
+          </div>
+        ))}
+      </div>
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-500 text-white text-xs font-bold shadow-md shadow-violet-200 mb-2">View in Maps</button>
+      <button className="w-full py-3 rounded-2xl border border-gray-200 text-gray-600 text-xs font-medium">Message Sofia</button>
     </div>
   </div>
 );
 
 // ─── FIXIT ─────────────────────────────────────────────────
+
 export const FixItS1: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="FixIt" />
-    <div className="px-4 py-3">
-      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">What do you need fixed?</div>
+  <div className="h-full flex flex-col bg-[#F0F4FF]">
+    <div className="bg-gradient-to-r from-blue-600 to-cyan-500 px-4 pt-4 pb-5">
+      <div className="text-white font-bold text-base mb-0.5">FixIt</div>
+      <div className="text-blue-100 text-[10px]">Home repairs, on demand</div>
+    </div>
+    <div className="px-4 pt-3 pb-2">
+      <div className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-2">What do you need?</div>
       <div className="grid grid-cols-3 gap-2">
         {[
-          { icon: <Wrench size={18} />, label: "Plumbing", active: true },
-          { icon: <Bell size={18} />, label: "Electrical" },
-          { icon: <Package size={18} />, label: "Painting" },
-          { icon: <RefreshCw size={18} />, label: "A/C" },
-          { icon: <Lock size={18} />, label: "Locks" },
-          { icon: <Truck size={18} />, label: "Moving" },
-        ].map((item) => (
-          <div key={item.label} className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border text-xs font-medium ${item.active ? "bg-violet-600 text-white border-violet-600" : "bg-white text-gray-700 border-gray-200"}`}>
-            {item.icon}
+          {icon:<Wrench size={16}/>,label:"Plumbing",active:true,color:"from-blue-500 to-cyan-500"},
+          {icon:<Zap size={16}/>,label:"Electrical",color:""},
+          {icon:<Package size={16}/>,label:"Painting",color:""},
+          {icon:<RefreshCw size={16}/>,label:"A/C",color:""},
+          {icon:<Lock size={16}/>,label:"Locks",color:""},
+          {icon:<Truck size={16}/>,label:"Moving",color:""},
+        ].map(item=>(
+          <div key={item.label} className={`flex flex-col items-center gap-1 py-3 rounded-xl text-[10px] font-semibold ${item.active ? `bg-gradient-to-br ${item.color} text-white shadow-md shadow-blue-200` : "bg-white text-gray-600 border border-gray-100 shadow-sm"}`}>
+            <span className={item.active?"text-white":"text-blue-500"}>{item.icon}</span>
             {item.label}
           </div>
         ))}
       </div>
     </div>
     <div className="mx-4 mt-2 bg-orange-50 border border-orange-200 rounded-xl px-3 py-2 flex items-center gap-2">
-      <AlertCircle size={14} className="text-orange-500 shrink-0" />
-      <span className="text-xs text-orange-700 font-medium">Emergency service available 24/7</span>
+      <Bell size={12} className="text-orange-500 shrink-0" />
+      <span className="text-[10px] text-orange-700 font-semibold">Emergency service available 24/7</span>
     </div>
-    <div className="px-4 mt-4">
-      <button className="w-full py-3 rounded-xl bg-violet-600 text-white text-xs font-semibold">Find a Technician Now</button>
+    <div className="px-4 mt-3">
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-xs font-bold shadow-md shadow-blue-200">Find a Technician →</button>
     </div>
   </div>
 );
 
 export const FixItS2: React.FC = () => (
   <div className="h-full flex flex-col bg-white">
-    <AppBar title="Technician" />
-    <div className="flex items-start gap-3 px-4 pt-4 pb-3 border-b border-gray-100">
-      <div className="w-14 h-14 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xl font-bold shrink-0">M</div>
-      <div className="flex-1">
-        <div className="flex items-center gap-2">
-          <div className="text-sm font-bold text-gray-900">Miguel Torres</div>
-          <StatusBadge label="Available" color="bg-green-100 text-green-700" />
+    <div className="bg-gradient-to-br from-blue-600 to-cyan-500 px-4 pt-4 pb-8">
+      <div className="flex items-center gap-2 mb-3">
+        <ArrowLeft size={14} className="text-white/70" />
+        <span className="text-white/70 text-xs">Results</span>
+      </div>
+      <div className="flex items-center gap-3">
+        <div className="w-14 h-14 rounded-2xl bg-white/20 text-white flex items-center justify-center text-2xl font-bold border border-white/30">M</div>
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-white font-bold text-sm">Miguel Torres</span>
+            <Tag label="Available" color="bg-green-400/30 text-green-100"/>
+          </div>
+          <div className="text-blue-100 text-[10px]">Licensed Plumber · 127 jobs</div>
+          <div className="flex items-center gap-1 mt-0.5"><Stars/><span className="text-white text-[10px] font-semibold">4.9</span></div>
         </div>
-        <div className="text-xs text-gray-500 mb-1">Licensed Plumber</div>
-        <RatingRow rating="4.9" count="127 jobs" />
-        <div className="text-xs text-violet-600 font-semibold mt-1">$45 / hour</div>
       </div>
     </div>
-    <div className="px-4 py-3 space-y-2 flex-1 overflow-hidden">
-      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Certifications</div>
-      {["Licensed Plumber · Cert. #4829", "Background check verified", "200+ completed jobs"].map((c) => (
-        <div key={c} className="flex items-center gap-2">
+    <div className="px-4 -mt-4 mb-3">
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-3 flex gap-3">
+        {[{l:"Rate",v:"$45/hr",c:"text-blue-600"},{l:"Distance",v:"1.4 km",c:"text-gray-700"},{l:"ETA",v:"15 min",c:"text-green-600"}].map(s=>(
+          <div key={s.l} className="flex-1 text-center">
+            <div className={`text-sm font-bold ${s.c}`}>{s.v}</div>
+            <div className="text-[9px] text-gray-400">{s.l}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div className="flex-1 px-4 space-y-2 overflow-hidden">
+      <div className="text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-1">Verified</div>
+      {["Licensed Plumber · Cert. #4829","Background check passed","200+ completed jobs"].map(c=>(
+        <div key={c} className="flex items-center gap-2 bg-green-50 rounded-xl px-3 py-2">
           <Check size={12} className="text-green-500 shrink-0" />
-          <span className="text-xs text-gray-700">{c}</span>
+          <span className="text-[10px] text-gray-700 font-medium">{c}</span>
         </div>
       ))}
-      <div className="mt-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Location</div>
-      <div className="bg-gray-100 rounded-xl h-16 flex items-center justify-center">
-        <div className="flex items-center gap-1 text-xs text-gray-400"><MapPin size={12} />1.4 km away</div>
-      </div>
     </div>
-    <div className="px-4 pb-4">
-      <button className="w-full py-3 rounded-xl bg-violet-600 text-white text-xs font-semibold">Request Service · $45/hr</button>
+    <div className="px-4 pb-4 pt-2">
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-xs font-bold shadow-md shadow-blue-200">Request Service · $45/hr →</button>
     </div>
   </div>
 );
 
 export const FixItS3: React.FC = () => (
-  <div className="h-full flex flex-col bg-white">
-    <AppBar title="Job Tracking" />
-    <div className="flex-1 flex flex-col px-4 pt-4">
-      <div className="bg-gray-100 rounded-2xl h-32 flex items-center justify-center mb-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 to-blue-50" />
-        <div className="relative flex flex-col items-center">
-          <Navigation size={24} className="text-violet-600 mb-1" />
-          <span className="text-xs text-gray-600 font-medium">Miguel is on the way</span>
-          <span className="text-lg font-bold text-gray-900">ETA 12 min</span>
+  <div className="h-full flex flex-col bg-[#F0F4FF]">
+    <div className="bg-gradient-to-r from-blue-600 to-cyan-500 px-4 pt-4 pb-4">
+      <div className="text-white font-bold text-sm">Job in Progress</div>
+      <div className="text-blue-100 text-[10px]">Miguel is on the way</div>
+    </div>
+    <div className="px-4 pt-4">
+      <div className="bg-white rounded-2xl shadow-md p-4 mb-4 flex flex-col items-center border border-blue-50">
+        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center mb-2 border-4 border-blue-200">
+          <Navigation size={24} className="text-blue-600" />
         </div>
+        <div className="text-2xl font-black text-gray-900">12 min</div>
+        <div className="text-[10px] text-gray-400 font-medium">ETA to your location</div>
       </div>
       <div className="flex items-center justify-between mb-4">
-        {["Confirmed", "En Route", "Arrived", "Done"].map((step, i) => (
+        {["Confirmed","En Route","Arrived","Done"].map((step,i)=>(
           <React.Fragment key={step}>
-            <div className={`flex flex-col items-center gap-1 ${i <= 1 ? "text-violet-600" : "text-gray-300"}`}>
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i <= 1 ? "bg-violet-600 text-white" : "bg-gray-200 text-gray-400"}`}>{i + 1}</div>
-              <span className="text-[9px] font-medium">{step}</span>
+            <div className={`flex flex-col items-center gap-1 ${i<=1?"text-blue-600":"text-gray-300"}`}>
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-black ${i<=1?"bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-sm":"bg-gray-100 text-gray-400"}`}>{i+1}</div>
+              <span className="text-[8px] font-semibold">{step}</span>
             </div>
-            {i < 3 && <div className={`flex-1 h-0.5 mx-1 ${i < 1 ? "bg-violet-600" : "bg-gray-200"}`} />}
+            {i<3&&<div className={`flex-1 h-0.5 mx-0.5 ${i<1?"bg-gradient-to-r from-blue-600 to-cyan-500":"bg-gray-200"}`}/>}
           </React.Fragment>
         ))}
       </div>
-      <div className="bg-gray-50 rounded-xl p-3 border border-gray-100 flex items-center gap-3">
-        <div className="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">M</div>
+      <div className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm flex items-center gap-3">
+        <AvatarCircle initials="M" bg="bg-blue-500" />
         <div className="flex-1">
-          <div className="text-xs font-semibold text-gray-900">Miguel Torres</div>
-          <div className="text-xs text-gray-400">Plumbing · $45/hr</div>
+          <div className="text-xs font-bold text-gray-900">Miguel Torres</div>
+          <div className="text-[10px] text-gray-400">Plumbing · $45/hr</div>
         </div>
-        <button className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center"><Phone size={14} className="text-violet-600" /></button>
+        <button className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center"><Phone size={14} className="text-blue-600" /></button>
       </div>
     </div>
   </div>
 );
 
 // ─── PETCARE ───────────────────────────────────────────────
+
 export const PetCareS1: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="PetCare" />
-    <div className="px-4 pt-4 pb-2">
-      <div className="flex items-center gap-3 bg-white rounded-2xl p-3 border border-gray-100 shadow-sm mb-4">
-        <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-lg">🐕</div>
+  <div className="h-full flex flex-col bg-[#FFF8F0]">
+    <div className="bg-gradient-to-r from-amber-500 to-orange-400 px-4 pt-4 pb-5">
+      <div className="flex items-center justify-between mb-3">
         <div>
-          <div className="text-xs font-bold text-gray-900">Hi, Luna!</div>
-          <div className="text-xs text-gray-400">Golden Retriever · 3 yrs</div>
+          <div className="text-white font-bold text-base">PetCare</div>
+          <div className="text-amber-100 text-[10px]">Care for your furry family</div>
         </div>
-        <ChevronRight size={14} className="text-gray-300 ml-auto" />
+        <Bell size={16} className="text-white/70" />
       </div>
-      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">What does Luna need?</div>
+      <div className="bg-white/20 border border-white/30 rounded-xl px-3 py-2 flex items-center gap-3">
+        <div className="w-8 h-8 rounded-full bg-white/30 flex items-center justify-center text-base">🐕</div>
+        <div>
+          <div className="text-white font-bold text-xs">Luna</div>
+          <div className="text-white/70 text-[9px]">Golden Retriever · 3 yrs</div>
+        </div>
+        <ChevronRight size={14} className="text-white/60 ml-auto" />
+      </div>
+    </div>
+    <div className="px-4 pt-3 flex-1 overflow-hidden">
+      <div className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-2">What does Luna need?</div>
       <div className="grid grid-cols-2 gap-2">
         {[
-          { icon: <Stethoscope size={20} />, label: "Vet Visit", price: "From $40", active: true },
-          { icon: <Users size={20} />, label: "Grooming", price: "From $30" },
-          { icon: <Check size={20} />, label: "Vaccines", price: "From $25" },
-          { icon: <AlertCircle size={20} />, label: "Emergency", price: "24/7", color: "text-red-500" },
-        ].map((item) => (
-          <div key={item.label} className={`flex flex-col items-center gap-1 py-4 rounded-xl border text-center ${item.active ? "bg-violet-600 text-white border-violet-600" : "bg-white border-gray-200"}`}>
-            <span className={item.active ? "text-white" : (item.color || "text-violet-600")}>{item.icon}</span>
-            <span className={`text-xs font-semibold ${item.active ? "text-white" : "text-gray-800"}`}>{item.label}</span>
-            <span className={`text-[10px] ${item.active ? "text-violet-200" : "text-gray-400"}`}>{item.price}</span>
+          {icon:<Stethoscope size={18}/>,label:"Vet Visit",price:"From $40",active:true,grad:"from-amber-500 to-orange-400"},
+          {icon:<Users size={18}/>,label:"Grooming",price:"From $30",grad:""},
+          {icon:<Check size={18}/>,label:"Vaccines",price:"From $25",grad:""},
+          {icon:<Bell size={18}/>,label:"Emergency",price:"24/7",grad:"",red:true},
+        ].map(item=>(
+          <div key={item.label} className={`flex flex-col items-center gap-1 py-4 rounded-2xl text-center ${item.active?`bg-gradient-to-br ${item.grad} shadow-md shadow-amber-200`:item.red?"bg-red-50 border border-red-100":"bg-white border border-gray-100 shadow-sm"}`}>
+            <span className={item.active?"text-white":item.red?"text-red-500":"text-amber-500"}>{item.icon}</span>
+            <span className={`text-[10px] font-bold ${item.active?"text-white":item.red?"text-red-600":"text-gray-800"}`}>{item.label}</span>
+            <span className={`text-[9px] ${item.active?"text-white/70":item.red?"text-red-400":"text-gray-400"}`}>{item.price}</span>
           </div>
         ))}
       </div>
@@ -290,64 +346,73 @@ export const PetCareS1: React.FC = () => (
 
 export const PetCareS2: React.FC = () => (
   <div className="h-full flex flex-col bg-white">
-    <AppBar title="Book Appointment" />
-    <div className="flex items-center gap-3 px-4 pt-4 pb-3 border-b border-gray-100">
-      <div className="w-12 h-12 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-lg font-bold">G</div>
-      <div>
-        <div className="text-sm font-bold text-gray-900">Dr. García</div>
-        <div className="text-xs text-gray-500">General Veterinarian</div>
-        <RatingRow rating="4.9" count="98 visits" />
+    <div className="bg-gradient-to-br from-amber-500 to-orange-400 px-4 pt-4 pb-7">
+      <div className="flex items-center gap-2 mb-3">
+        <ArrowLeft size={14} className="text-white/70" />
+        <span className="text-white/70 text-xs">Vets near you</span>
+      </div>
+      <div className="flex items-center gap-3">
+        <div className="w-13 h-13 w-12 h-12 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center text-xl font-bold text-white">G</div>
+        <div>
+          <div className="text-white font-bold text-sm">Dr. García</div>
+          <div className="text-amber-100 text-[10px]">General Veterinarian</div>
+          <div className="flex items-center gap-1 mt-0.5"><Stars/><span className="text-white text-[10px]">4.9</span><span className="text-white/60 text-[10px]">(98)</span></div>
+        </div>
       </div>
     </div>
-    <div className="px-4 py-3 flex-1 overflow-hidden">
-      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Today's available slots</div>
-      <div className="flex gap-2 flex-wrap mb-4">
-        {["10:00 AM", "2:00 PM", "4:30 PM"].map((t, i) => (
-          <span key={t} className={`px-3 py-2 rounded-xl text-xs font-medium border ${i === 1 ? "bg-violet-600 text-white border-violet-600" : "bg-white text-gray-700 border-gray-200"}`}>{t}</span>
+    <div className="flex-1 px-4 pt-3 overflow-hidden">
+      <div className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-2">Available today</div>
+      <div className="flex gap-2 mb-3 flex-wrap">
+        {["10:00 AM","2:00 PM","4:30 PM"].map((t,i)=>(
+          <span key={t} className={`px-3 py-2 rounded-xl text-[10px] font-bold border ${i===1?"bg-amber-500 text-white border-amber-500 shadow-sm":"bg-gray-50 text-gray-700 border-gray-200"}`}>{t}</span>
         ))}
       </div>
-      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Pet</div>
-      <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 mb-4">
+      <div className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-2">Your pet</div>
+      <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5 mb-3">
         <span className="text-base">🐕</span>
-        <span className="text-xs font-medium text-gray-900">Luna · Golden Retriever</span>
-        <Check size={12} className="text-violet-600 ml-auto" />
+        <div className="flex-1">
+          <div className="text-xs font-bold text-gray-900">Luna</div>
+          <div className="text-[10px] text-gray-400">Golden Retriever</div>
+        </div>
+        <Check size={14} className="text-amber-500" />
       </div>
-      <div className="flex items-center justify-between text-xs text-gray-600 bg-gray-50 rounded-xl px-3 py-2">
-        <span>Vet Visit at home</span>
-        <span className="font-bold text-gray-900">$40</span>
+      <div className="flex items-center justify-between bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100 rounded-xl px-3 py-2.5">
+        <span className="text-[10px] text-gray-700 font-medium">Vet Visit at home</span>
+        <span className="text-sm font-bold text-amber-600">$40</span>
       </div>
     </div>
-    <div className="px-4 pb-4">
-      <button className="w-full py-3 rounded-xl bg-violet-600 text-white text-xs font-semibold">Confirm Appointment · $40</button>
+    <div className="px-4 pb-4 pt-2">
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-400 text-white text-xs font-bold shadow-md shadow-amber-200">Confirm · $40 →</button>
     </div>
   </div>
 );
 
 export const PetCareS3: React.FC = () => (
-  <div className="h-full flex flex-col bg-white">
-    <AppBar title="Tracking" />
-    <div className="flex-1 flex flex-col items-center px-4 pt-5">
-      <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-2">
-        <PawPrint size={26} className="text-green-500" />
+  <div className="h-full flex flex-col bg-[#FFF8F0]">
+    <div className="bg-gradient-to-r from-amber-500 to-orange-400 px-4 pt-4 pb-4">
+      <div className="text-white font-bold text-sm">Dr. García is on the way!</div>
+      <div className="text-amber-100 text-[10px]">Estimated arrival: 18 min</div>
+    </div>
+    <div className="px-4 pt-4">
+      <div className="bg-white rounded-2xl shadow-md p-4 mb-4 flex flex-col items-center border border-amber-50">
+        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center mb-2 border-4 border-amber-200">
+          <PawPrint size={24} className="text-amber-500" />
+        </div>
+        <div className="text-2xl font-black text-gray-900">18 min</div>
+        <div className="text-[10px] text-gray-400 font-medium">ETA to your home</div>
       </div>
-      <div className="text-sm font-bold text-gray-900 mb-1">Dr. García is on the way!</div>
-      <div className="text-xs text-gray-400 mb-4">Estimated arrival: 18 minutes</div>
-      <div className="w-full bg-gray-100 rounded-2xl h-24 flex items-center justify-center mb-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-teal-50" />
-        <div className="relative flex items-center gap-2 text-xs text-gray-500"><Navigation size={16} className="text-violet-600" />Live tracking active</div>
-      </div>
-      <div className="w-full space-y-2">
+      <div className="space-y-2">
         {[
-          { step: "Booking confirmed", done: true },
-          { step: "Vet heading to your location", done: true },
-          { step: "Vet arrived", done: false },
-          { step: "Appointment completed", done: false },
-        ].map((s) => (
+          {step:"Booking confirmed",done:true},
+          {step:"Vet heading to your location",done:true},
+          {step:"Vet arrived",done:false},
+          {step:"Appointment completed",done:false},
+        ].map(s=>(
           <div key={s.step} className="flex items-center gap-3">
-            <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${s.done ? "bg-green-500" : "bg-gray-200"}`}>
-              {s.done ? <Check size={10} className="text-white" /> : <div className="w-2 h-2 rounded-full bg-gray-400" />}
+            <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${s.done?"bg-gradient-to-br from-amber-500 to-orange-400":"bg-gray-200"}`}>
+              {s.done?<Check size={10} className="text-white"/>:<div className="w-1.5 h-1.5 rounded-full bg-gray-400"/>}
             </div>
-            <span className={`text-xs ${s.done ? "text-gray-900 font-medium" : "text-gray-400"}`}>{s.step}</span>
+            <span className={`text-[10px] font-medium ${s.done?"text-gray-900":"text-gray-400"}`}>{s.step}</span>
           </div>
         ))}
       </div>
@@ -356,63 +421,68 @@ export const PetCareS3: React.FC = () => (
 );
 
 // ─── MOVEIT ────────────────────────────────────────────────
+
 export const MoveItS1: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="MoveIt" />
-    <div className="px-4 pt-4 pb-2 flex-1 overflow-hidden">
-      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">How big is your move?</div>
-      <div className="space-y-2 mb-4">
+  <div className="h-full flex flex-col bg-[#F0F2FF]">
+    <div className="bg-gradient-to-r from-indigo-600 to-blue-500 px-4 pt-4 pb-5">
+      <div className="text-white font-bold text-base mb-0.5">MoveIt</div>
+      <div className="text-indigo-200 text-[10px]">Moving made simple</div>
+    </div>
+    <div className="px-4 pt-3 flex-1 overflow-hidden">
+      <div className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-2">How big is your move?</div>
+      <div className="space-y-2 mb-3">
         {[
-          { label: "Studio / Bedroom", size: "~10 items", price: "$120–$160" },
-          { label: "1 Bedroom", size: "~25 items", price: "$160–$200", active: true },
-          { label: "2 Bedrooms", size: "~40 items", price: "$220–$280" },
-          { label: "3+ Bedrooms", size: "50+ items", price: "$320+" },
-        ].map((o) => (
-          <div key={o.label} className={`flex items-center justify-between px-4 py-3 rounded-xl border ${o.active ? "border-violet-600 bg-violet-50" : "border-gray-200 bg-white"}`}>
+          {label:"Studio / Bedroom",size:"~10 items",price:"$120–$160"},
+          {label:"1 Bedroom",size:"~25 items",price:"$160–$200",active:true},
+          {label:"2 Bedrooms",size:"~40 items",price:"$220–$280"},
+          {label:"3+ Bedrooms",size:"50+ items",price:"$320+"},
+        ].map(o=>(
+          <div key={o.label} className={`flex items-center justify-between px-4 py-3 rounded-2xl border ${o.active?"bg-gradient-to-r from-indigo-600 to-blue-500 border-indigo-500 shadow-md shadow-indigo-200":"bg-white border-gray-100 shadow-sm"}`}>
             <div>
-              <div className={`text-xs font-semibold ${o.active ? "text-violet-700" : "text-gray-900"}`}>{o.label}</div>
-              <div className="text-xs text-gray-400">{o.size}</div>
+              <div className={`text-[10px] font-bold ${o.active?"text-white":"text-gray-900"}`}>{o.label}</div>
+              <div className={`text-[9px] ${o.active?"text-indigo-200":"text-gray-400"}`}>{o.size}</div>
             </div>
-            <div className={`text-xs font-bold ${o.active ? "text-violet-600" : "text-gray-600"}`}>{o.price}</div>
+            <div className={`text-xs font-black ${o.active?"text-white":"text-indigo-600"}`}>{o.price}</div>
           </div>
         ))}
       </div>
-      <div className="bg-violet-50 border border-violet-200 rounded-xl p-3 text-center">
-        <div className="text-xs text-gray-500">Estimated price</div>
-        <div className="text-xl font-bold text-violet-600">$160 – $200</div>
-        <div className="text-xs text-gray-400">Including 2 movers + truck</div>
+      <div className="bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl p-3 text-center">
+        <div className="text-[10px] text-gray-500">Your estimate</div>
+        <div className="text-xl font-black text-indigo-600">$160 – $200</div>
+        <div className="text-[9px] text-gray-400">2 movers + truck included</div>
       </div>
     </div>
-    <div className="px-4 pb-4">
-      <button className="w-full py-3 rounded-xl bg-violet-600 text-white text-xs font-semibold">Find Available Movers</button>
+    <div className="px-4 pb-4 pt-2">
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-500 text-white text-xs font-bold shadow-md shadow-indigo-200">Find Available Movers →</button>
     </div>
   </div>
 );
 
 export const MoveItS2: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="Choose Your Mover" />
+  <div className="h-full flex flex-col bg-[#F0F2FF]">
+    <div className="bg-gradient-to-r from-indigo-600 to-blue-500 px-4 pt-4 pb-4">
+      <div className="text-white font-bold text-sm">Choose Your Mover</div>
+      <div className="text-indigo-200 text-[10px]">2 available now</div>
+    </div>
     <div className="px-4 pt-3 space-y-3 flex-1 overflow-hidden">
       {[
-        { name: "Carlos & Team", truck: "3-ton truck", rating: "4.9", jobs: "312 moves", price: "$175", eta: "Available now", color: "bg-violet-100 text-violet-700" },
-        { name: "ProMovers", truck: "5-ton truck", rating: "4.8", jobs: "198 moves", price: "$195", eta: "In 1 hr", color: "bg-blue-100 text-blue-700" },
-      ].map((m) => (
-        <div key={m.name} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="p-4">
-            <div className="flex items-start gap-3">
-              <Avatar name={m.name} color={m.color} />
-              <div className="flex-1">
-                <div className="text-xs font-bold text-gray-900">{m.name}</div>
-                <div className="text-xs text-gray-400 flex items-center gap-1"><Truck size={10} />{m.truck}</div>
-                <RatingRow rating={m.rating} count={m.jobs} />
+        {name:"Carlos & Team",truck:"3-ton truck",r:"4.9",jobs:"312 moves",price:"$175",eta:"Now",bg:"bg-indigo-500"},
+        {name:"ProMovers",truck:"5-ton truck",r:"4.8",jobs:"198 moves",price:"$195",eta:"In 1 hr",bg:"bg-blue-500"},
+      ].map(m=>(
+        <div key={m.name} className="bg-white rounded-2xl overflow-hidden shadow-md border border-indigo-50">
+          <div className="p-3 flex items-start gap-3">
+            <AvatarCircle initials={m.name[0]} bg={m.bg} />
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-gray-900">{m.name}</span>
+                <Tag label={m.eta} color="bg-green-100 text-green-700"/>
               </div>
-              <div className="text-right">
-                <div className="text-sm font-bold text-gray-900">{m.price}</div>
-                <StatusBadge label={m.eta} color="bg-green-100 text-green-700" />
-              </div>
+              <div className="flex items-center gap-1 text-[10px] text-gray-400"><Truck size={9}/>{m.truck}</div>
+              <div className="flex items-center gap-1 mt-0.5"><Stars/><span className="text-[10px] text-gray-500 font-medium">{m.r}</span><span className="text-[10px] text-gray-300">·</span><span className="text-[10px] text-gray-400">{m.jobs}</span></div>
             </div>
+            <div className="text-sm font-black text-indigo-600">{m.price}</div>
           </div>
-          <button className="w-full bg-violet-600 text-white py-2.5 text-xs font-semibold">Select · {m.price}</button>
+          <button className="w-full bg-gradient-to-r from-indigo-600 to-blue-500 text-white py-2.5 text-[10px] font-bold">Select · {m.price} →</button>
         </div>
       ))}
     </div>
@@ -420,35 +490,32 @@ export const MoveItS2: React.FC = () => (
 );
 
 export const MoveItS3: React.FC = () => (
-  <div className="h-full flex flex-col bg-white">
-    <AppBar title="Move Tracking" />
-    <div className="flex-1 px-4 pt-4">
-      <div className="text-center mb-3">
-        <div className="text-xs text-gray-400">Carlos & Team</div>
-        <div className="text-sm font-bold text-gray-900">Your move is in progress</div>
-      </div>
-      <div className="bg-gradient-to-br from-violet-50 to-blue-50 rounded-2xl h-28 flex items-center justify-center mb-4">
-        <div className="text-center">
-          <Truck size={28} className="text-violet-600 mx-auto mb-1" />
-          <div className="text-lg font-bold text-gray-900">25 min</div>
-          <div className="text-xs text-gray-400">until delivery</div>
+  <div className="h-full flex flex-col bg-[#F0F2FF]">
+    <div className="bg-gradient-to-r from-indigo-600 to-blue-500 px-4 pt-4 pb-4">
+      <div className="text-white font-bold text-sm">Your move is in progress</div>
+      <div className="text-indigo-200 text-[10px]">Carlos & Team</div>
+    </div>
+    <div className="px-4 pt-4">
+      <div className="bg-white rounded-2xl shadow-md p-4 mb-4 flex flex-col items-center border border-indigo-50">
+        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center mb-2 border-4 border-indigo-200">
+          <Truck size={22} className="text-indigo-600" />
         </div>
+        <div className="text-2xl font-black text-gray-900">25 min</div>
+        <div className="text-[10px] text-gray-400">until delivery</div>
       </div>
-      <div className="space-y-3">
+      <div className="space-y-2">
         {[
-          { label: "Loading items", done: true, time: "10:30 AM" },
-          { label: "In transit", done: true, time: "11:15 AM" },
-          { label: "Unloading at destination", done: false, time: "~11:45 AM" },
-          { label: "Move completed", done: false, time: "~12:00 PM" },
-        ].map((s) => (
-          <div key={s.label} className="flex items-center gap-3">
-            <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${s.done ? "bg-violet-600" : "bg-gray-200"}`}>
-              {s.done ? <Check size={10} className="text-white" /> : <div className="w-2 h-2 rounded-full bg-gray-300" />}
+          {label:"Loading items",time:"10:30 AM",done:true},
+          {label:"In transit",time:"11:15 AM",done:true},
+          {label:"Unloading at destination",time:"~11:45 AM",done:false},
+          {label:"Move completed",time:"~12:00 PM",done:false},
+        ].map(s=>(
+          <div key={s.label} className="flex items-center gap-3 bg-white rounded-xl px-3 py-2.5 shadow-sm border border-gray-50">
+            <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${s.done?"bg-gradient-to-br from-indigo-600 to-blue-500":"bg-gray-100"}`}>
+              {s.done?<Check size={10} className="text-white"/>:<div className="w-1.5 h-1.5 rounded-full bg-gray-300"/>}
             </div>
-            <div className="flex-1">
-              <span className={`text-xs ${s.done ? "text-gray-900 font-medium" : "text-gray-400"}`}>{s.label}</span>
-            </div>
-            <span className="text-xs text-gray-400">{s.time}</span>
+            <span className={`flex-1 text-[10px] font-medium ${s.done?"text-gray-900":"text-gray-400"}`}>{s.label}</span>
+            <span className="text-[9px] text-gray-400">{s.time}</span>
           </div>
         ))}
       </div>
@@ -457,37 +524,41 @@ export const MoveItS3: React.FC = () => (
 );
 
 // ─── TABLEORDER ────────────────────────────────────────────
+
 export const TableOrderS1: React.FC = () => (
   <div className="h-full flex flex-col bg-white">
-    <div className="bg-white px-4 py-3 border-b border-gray-100">
-      <div className="text-sm font-bold text-gray-900">La Trattoria</div>
-      <div className="text-xs text-gray-400 flex items-center gap-1"><span className="text-amber-400">★</span> 4.8 · Italian · $$</div>
+    <div className="bg-gradient-to-r from-orange-500 to-red-500 px-4 pt-3 pb-3">
+      <div className="text-white font-bold text-sm">La Trattoria</div>
+      <div className="flex items-center gap-1.5">
+        <Star size={10} className="text-yellow-300 fill-yellow-300" />
+        <span className="text-orange-100 text-[10px] font-medium">4.8 · Italian · $$</span>
+      </div>
     </div>
     <div className="flex gap-2 px-4 py-2 border-b border-gray-100 overflow-hidden">
-      {["Starters", "Pasta", "Pizza", "Desserts", "Drinks"].map((c, i) => (
-        <button key={c} className={`px-3 py-1 rounded-full text-xs font-medium shrink-0 ${i === 1 ? "bg-orange-500 text-white" : "text-gray-500"}`}>{c}</button>
+      {["Starters","Pasta","Pizza","Desserts"].map((c,i)=>(
+        <button key={c} className={`px-3 py-1 rounded-full text-[10px] font-bold shrink-0 ${i===1?"bg-orange-500 text-white shadow-sm":"text-gray-400"}`}>{c}</button>
       ))}
     </div>
-    <div className="flex-1 px-4 py-2 space-y-3 overflow-hidden">
+    <div className="flex-1 px-4 py-2 space-y-2 overflow-hidden">
       {[
-        { name: "Spaghetti Bolognese", desc: "Classic beef ragù, parmesan", price: "$14" },
-        { name: "Tagliatelle al Pesto", desc: "Basil pesto, pine nuts", price: "$13" },
-        { name: "Carbonara", desc: "Guanciale, egg, pecorino", price: "$15" },
-      ].map((item) => (
-        <div key={item.name} className="flex items-center gap-3 border-b border-gray-50 pb-3">
-          <div className="w-14 h-14 rounded-xl bg-orange-50 flex items-center justify-center text-2xl shrink-0">🍝</div>
+        {name:"Spaghetti Bolognese",desc:"Classic beef ragù",price:"$14",emoji:"🍝"},
+        {name:"Tagliatelle al Pesto",desc:"Basil pesto, pine nuts",price:"$13",emoji:"🌿"},
+        {name:"Carbonara",desc:"Guanciale, pecorino",price:"$15",emoji:"🍳"},
+      ].map(item=>(
+        <div key={item.name} className="flex items-center gap-3 border-b border-gray-50 pb-2">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center text-2xl shrink-0">{item.emoji}</div>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-semibold text-gray-900">{item.name}</div>
-            <div className="text-xs text-gray-400">{item.desc}</div>
-            <div className="text-xs font-bold text-gray-900 mt-0.5">{item.price}</div>
+            <div className="text-[10px] font-bold text-gray-900">{item.name}</div>
+            <div className="text-[9px] text-gray-400">{item.desc}</div>
+            <div className="text-[10px] font-black text-orange-500 mt-0.5">{item.price}</div>
           </div>
-          <button className="w-7 h-7 rounded-full bg-violet-600 text-white flex items-center justify-center shrink-0"><Plus size={14} /></button>
+          <button className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500 to-red-500 text-white flex items-center justify-center shadow-sm shrink-0"><Plus size={13}/></button>
         </div>
       ))}
     </div>
     <div className="px-4 pb-3">
-      <button className="w-full py-2.5 rounded-xl bg-orange-500 text-white text-xs font-semibold flex items-center justify-center gap-2">
-        <ShoppingBag size={14} />View order · $27
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold shadow-md shadow-orange-200 flex items-center justify-center gap-2">
+        <ShoppingBag size={14}/>View order · $27
       </button>
     </div>
   </div>
@@ -495,56 +566,63 @@ export const TableOrderS1: React.FC = () => (
 
 export const TableOrderS2: React.FC = () => (
   <div className="h-full flex flex-col bg-white">
-    <AppBar title="Your Order" />
-    <div className="flex gap-2 mx-4 mt-3 p-1 bg-gray-100 rounded-xl mb-3">
-      <button className="flex-1 py-2 rounded-lg bg-white text-xs font-semibold shadow-sm text-gray-900">Dine In</button>
-      <button className="flex-1 py-2 rounded-lg text-xs font-medium text-gray-500">Takeout</button>
-      <button className="flex-1 py-2 rounded-lg text-xs font-medium text-gray-500">Delivery</button>
-    </div>
-    <div className="flex-1 px-4 space-y-2 overflow-hidden">
-      {[
-        { name: "Spaghetti Bolognese", qty: 1, price: "$14.00" },
-        { name: "Carbonara", qty: 2, price: "$30.00" },
-        { name: "Sparkling Water", qty: 1, price: "$3.50" },
-      ].map((item) => (
-        <div key={item.name} className="flex items-center justify-between py-2 border-b border-gray-50">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold">{item.qty}</div>
-            <span className="text-xs text-gray-800">{item.name}</span>
-          </div>
-          <span className="text-xs font-semibold text-gray-900">{item.price}</span>
-        </div>
-      ))}
-      <div className="pt-2 space-y-1">
-        <div className="flex justify-between text-xs text-gray-400"><span>Subtotal</span><span>$47.50</span></div>
-        <div className="flex justify-between text-xs text-gray-400"><span>Tax (8%)</span><span>$3.80</span></div>
-        <div className="flex justify-between text-sm font-bold text-gray-900 pt-1 border-t border-gray-100"><span>Total</span><span>$51.30</span></div>
+    <div className="bg-gradient-to-r from-orange-500 to-red-500 px-4 pt-4 pb-4">
+      <div className="flex items-center gap-2 mb-2">
+        <ArrowLeft size={14} className="text-white/70" />
+        <span className="text-white font-bold text-sm">Your Order</span>
+      </div>
+      <div className="flex gap-1 bg-white/20 rounded-xl p-0.5">
+        {["Dine In","Takeout","Delivery"].map((t,i)=>(
+          <button key={t} className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold ${i===0?"bg-white text-orange-600":"text-white/70"}`}>{t}</button>
+        ))}
       </div>
     </div>
-    <div className="px-4 pb-4">
-      <button className="w-full py-3 rounded-xl bg-orange-500 text-white text-xs font-semibold">Place Order · $51.30</button>
+    <div className="flex-1 px-4 pt-3 space-y-2 overflow-hidden">
+      {[
+        {name:"Spaghetti Bolognese",qty:1,price:"$14.00"},
+        {name:"Carbonara",qty:2,price:"$30.00"},
+        {name:"Sparkling Water",qty:1,price:"$3.50"},
+      ].map(item=>(
+        <div key={item.name} className="flex items-center justify-between py-2 border-b border-gray-50">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-[9px] font-black">{item.qty}</div>
+            <span className="text-[10px] text-gray-800 font-medium">{item.name}</span>
+          </div>
+          <span className="text-[10px] font-bold text-gray-900">{item.price}</span>
+        </div>
+      ))}
+      <div className="pt-1 space-y-1.5">
+        <div className="flex justify-between text-[10px] text-gray-400"><span>Subtotal</span><span>$47.50</span></div>
+        <div className="flex justify-between text-[10px] text-gray-400"><span>Tax (8%)</span><span>$3.80</span></div>
+        <div className="flex justify-between text-xs font-black text-gray-900 pt-1 border-t border-gray-100"><span>Total</span><span>$51.30</span></div>
+      </div>
+    </div>
+    <div className="px-4 pb-4 pt-2">
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold shadow-md shadow-orange-200">Place Order · $51.30 →</button>
     </div>
   </div>
 );
 
 export const TableOrderS3: React.FC = () => (
   <div className="h-full flex flex-col bg-gray-100">
-    <div className="bg-orange-500 px-4 py-3">
-      <div className="text-white text-sm font-bold">Kitchen Display</div>
-      <div className="text-orange-100 text-xs">La Trattoria · Live orders</div>
+    <div className="bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3">
+      <div className="text-white font-bold text-sm">Kitchen Display</div>
+      <div className="text-orange-100 text-[10px]">La Trattoria · Live orders</div>
     </div>
     <div className="flex-1 px-3 pt-3 space-y-2 overflow-hidden">
       {[
-        { table: "Table 4", items: ["Spaghetti Bolognese", "Carbonara ×2"], status: "Preparing", color: "bg-orange-100 text-orange-700" },
-        { table: "Table 7", items: ["Tagliatelle al Pesto"], status: "Ready", color: "bg-green-100 text-green-700" },
-        { table: "Takeout #12", items: ["Carbonara", "Sparkling Water"], status: "New", color: "bg-blue-100 text-blue-700" },
-      ].map((order) => (
-        <div key={order.table} className="bg-white rounded-xl p-3 shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-gray-900">{order.table}</span>
-            <StatusBadge label={order.status} color={order.color} />
+        {table:"Table 4",items:["Spaghetti Bolognese","Carbonara ×2"],status:"Preparing",grad:"from-orange-500 to-red-500",timer:"8 min"},
+        {table:"Table 7",items:["Tagliatelle al Pesto"],status:"Ready ✓",grad:"from-green-500 to-emerald-500",timer:"Done"},
+        {table:"Takeout #12",items:["Carbonara","Water"],status:"New",grad:"from-blue-500 to-indigo-500",timer:"New"},
+      ].map(order=>(
+        <div key={order.table} className="bg-white rounded-2xl overflow-hidden shadow-sm">
+          <div className={`bg-gradient-to-r ${order.grad} px-3 py-2 flex items-center justify-between`}>
+            <span className="text-white font-bold text-xs">{order.table}</span>
+            <span className="text-white/80 text-[10px] font-semibold">{order.timer}</span>
           </div>
-          {order.items.map((i) => <div key={i} className="text-xs text-gray-600 flex items-center gap-1"><span className="w-1 h-1 rounded-full bg-gray-400 inline-block" />{i}</div>)}
+          <div className="px-3 py-2">
+            {order.items.map(i=><div key={i} className="text-[10px] text-gray-600 flex items-center gap-1"><span className="w-1 h-1 rounded-full bg-gray-300 inline-block"/>{i}</div>)}
+          </div>
         </div>
       ))}
     </div>
@@ -552,91 +630,104 @@ export const TableOrderS3: React.FC = () => (
 );
 
 // ─── FRESHBOX ──────────────────────────────────────────────
+
 export const FreshBoxS1: React.FC = () => (
   <div className="h-full flex flex-col bg-white">
-    <AppBar title="This Week's Box" action={<span className="text-xs text-violet-600 font-medium">Edit</span>} />
+    <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-4 pt-4 pb-4">
+      <div className="flex items-center justify-between mb-1">
+        <div className="text-white font-bold text-sm">This Week's Box</div>
+        <button className="text-white/70 text-[10px] font-semibold border border-white/30 rounded-lg px-2 py-0.5">Edit</button>
+      </div>
+      <div className="text-green-100 text-[10px]">Standard Plan · Delivery Thursday</div>
+    </div>
     <div className="px-4 pt-3 flex-1 overflow-hidden">
-      <div className="text-xs text-gray-500 mb-3">Standard Plan · Delivery Thursday</div>
-      <div className="space-y-2 mb-4">
+      <div className="space-y-2">
         {[
-          { item: "Organic Tomatoes", weight: "500g", fresh: true },
-          { item: "Avocados", weight: "×2", fresh: true },
-          { item: "Butter Lettuce", weight: "1 head", fresh: true },
-          { item: "Baby Carrots", weight: "300g", fresh: true },
-          { item: "Broccoli", weight: "400g", fresh: true },
-        ].map((p) => (
-          <div key={p.item} className="flex items-center gap-3 py-2 border-b border-gray-50">
-            <div className="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center text-sm">🥦</div>
+          {item:"Organic Tomatoes",weight:"500g",emoji:"🍅"},
+          {item:"Avocados",weight:"×2",emoji:"🥑"},
+          {item:"Butter Lettuce",weight:"1 head",emoji:"🥬"},
+          {item:"Baby Carrots",weight:"300g",emoji:"🥕"},
+          {item:"Broccoli",weight:"400g",emoji:"🥦"},
+        ].map(p=>(
+          <div key={p.item} className="flex items-center gap-3 bg-green-50 rounded-xl px-3 py-2 border border-green-100">
+            <span className="text-xl">{p.emoji}</span>
             <div className="flex-1">
-              <div className="text-xs font-medium text-gray-900">{p.item}</div>
-              <div className="text-xs text-gray-400">{p.weight}</div>
+              <div className="text-[10px] font-bold text-gray-900">{p.item}</div>
+              <div className="text-[9px] text-gray-400">{p.weight}</div>
             </div>
-            {p.fresh && <StatusBadge label="Fresh" color="bg-green-100 text-green-600" />}
+            <Tag label="Fresh" color="bg-green-200 text-green-700"/>
           </div>
         ))}
       </div>
-      <button className="flex items-center gap-2 text-xs text-violet-600 font-medium"><Plus size={12} />Add or swap items</button>
+      <button className="flex items-center gap-1.5 mt-3 text-[10px] text-green-600 font-bold"><Plus size={12}/>Add or swap items</button>
     </div>
   </div>
 );
 
 export const FreshBoxS2: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="Choose a Plan" />
-    <div className="px-4 pt-4 space-y-3 flex-1 overflow-hidden">
+  <div className="h-full flex flex-col bg-[#F0FFF4]">
+    <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-4 pt-4 pb-4">
+      <div className="text-white font-bold text-sm">Choose a Plan</div>
+      <div className="text-green-100 text-[10px]">Fresh from local farms</div>
+    </div>
+    <div className="px-4 pt-3 space-y-3 flex-1 overflow-hidden">
       {[
-        { name: "Basic", items: "8–10 items", price: "$29/wk", desc: "Perfect for 1–2 people" },
-        { name: "Standard", items: "12–14 items", price: "$49/wk", desc: "Ideal for families", active: true },
-        { name: "Premium", items: "18–20 items", price: "$79/wk", desc: "Fully stocked kitchen" },
-      ].map((plan) => (
-        <div key={plan.name} className={`rounded-2xl p-4 border ${plan.active ? "border-green-500 bg-green-50" : "border-gray-200 bg-white"}`}>
+        {name:"Basic",items:"8–10 items",price:"$29",freq:"/wk",desc:"For 1–2 people"},
+        {name:"Standard",items:"12–14 items",price:"$49",freq:"/wk",desc:"Ideal for families",active:true},
+        {name:"Premium",items:"18–20 items",price:"$79",freq:"/wk",desc:"Fully stocked kitchen"},
+      ].map(plan=>(
+        <div key={plan.name} className={`rounded-2xl p-3 border ${plan.active?"bg-gradient-to-br from-green-600 to-emerald-500 border-green-500 shadow-md shadow-green-200":"bg-white border-gray-100 shadow-sm"}`}>
           <div className="flex items-start justify-between">
             <div>
-              <div className={`text-sm font-bold ${plan.active ? "text-green-700" : "text-gray-900"}`}>{plan.name}</div>
-              <div className="text-xs text-gray-500">{plan.desc}</div>
-              <div className="text-xs text-gray-400 mt-0.5">{plan.items}</div>
+              <div className={`text-xs font-bold ${plan.active?"text-white":"text-gray-900"}`}>{plan.name}</div>
+              <div className={`text-[10px] ${plan.active?"text-green-100":"text-gray-500"}`}>{plan.desc}</div>
+              <div className={`text-[9px] ${plan.active?"text-green-200":"text-gray-400"}`}>{plan.items}</div>
             </div>
             <div className="text-right">
-              <div className={`text-sm font-bold ${plan.active ? "text-green-700" : "text-gray-900"}`}>{plan.price}</div>
-              {plan.active && <span className="text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">Selected</span>}
+              <span className={`text-base font-black ${plan.active?"text-white":"text-green-600"}`}>{plan.price}</span>
+              <span className={`text-[9px] ${plan.active?"text-green-200":"text-gray-400"}`}>{plan.freq}</span>
+              {plan.active&&<div className="mt-0.5"><Tag label="Selected ✓" color="bg-white/30 text-white"/></div>}
             </div>
           </div>
         </div>
       ))}
-      <div className="flex items-center gap-2 bg-white rounded-xl border border-gray-200 p-3">
-        <Leaf size={14} className="text-green-500" />
-        <span className="text-xs text-gray-600">From 12+ local farms in your region</span>
+      <div className="flex items-center gap-2 bg-white rounded-xl border border-green-100 p-2.5 shadow-sm">
+        <Leaf size={13} className="text-green-500 shrink-0" />
+        <span className="text-[10px] text-gray-600 font-medium">From 12+ local farms in your region</span>
       </div>
     </div>
-    <div className="px-4 pb-4">
-      <button className="w-full py-3 rounded-xl bg-green-500 text-white text-xs font-semibold">Start Subscription · $49/wk</button>
+    <div className="px-4 pb-4 pt-2">
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-500 text-white text-xs font-bold shadow-md shadow-green-200">Start Subscription · $49/wk →</button>
     </div>
   </div>
 );
 
 export const FreshBoxS3: React.FC = () => (
-  <div className="h-full flex flex-col bg-white">
-    <AppBar title="Delivery Tracking" />
-    <div className="flex-1 px-4 pt-4">
-      <div className="bg-green-50 border border-green-200 rounded-2xl p-4 mb-4 text-center">
-        <div className="text-xs text-gray-500">Next delivery</div>
-        <div className="text-lg font-bold text-gray-900">Thursday, Jun 6</div>
-        <div className="text-xs text-green-600 font-medium">Between 8:00 AM – 12:00 PM</div>
+  <div className="h-full flex flex-col bg-[#F0FFF4]">
+    <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-4 pt-4 pb-4">
+      <div className="text-white font-bold text-sm">Delivery Tracking</div>
+      <div className="text-green-100 text-[10px]">Standard Plan · Jun 6</div>
+    </div>
+    <div className="px-4 pt-4">
+      <div className="bg-white rounded-2xl shadow-md p-4 mb-4 text-center border border-green-50">
+        <div className="text-[10px] text-gray-400 mb-1">Next delivery</div>
+        <div className="text-base font-black text-gray-900">Thursday, Jun 6</div>
+        <div className="text-[10px] text-green-600 font-bold">Between 8:00 AM – 12:00 PM</div>
       </div>
       <div className="space-y-3">
         {[
-          { label: "Order placed", detail: "Sun, Jun 2 · 9:00 AM", done: true },
-          { label: "Box packed at farm", detail: "Wed, Jun 5", done: true },
-          { label: "Out for delivery", detail: "Thu, Jun 6 · 8:00 AM", done: false },
-          { label: "Delivered!", detail: "Expected by 12:00 PM", done: false },
-        ].map((s) => (
+          {label:"Order placed",detail:"Sun, Jun 2 · 9:00 AM",done:true},
+          {label:"Box packed at farm",detail:"Wed, Jun 5",done:true},
+          {label:"Out for delivery",detail:"Thu, Jun 6 · 8:00 AM",done:false},
+          {label:"Delivered!",detail:"Expected by 12:00 PM",done:false},
+        ].map(s=>(
           <div key={s.label} className="flex items-start gap-3">
-            <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${s.done ? "bg-green-500" : "bg-gray-200"}`}>
-              {s.done ? <Check size={10} className="text-white" /> : <div className="w-2 h-2 rounded-full bg-gray-300" />}
+            <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${s.done?"bg-gradient-to-br from-green-500 to-emerald-500":"bg-gray-200"}`}>
+              {s.done?<Check size={10} className="text-white"/>:<div className="w-1.5 h-1.5 rounded-full bg-gray-300"/>}
             </div>
             <div>
-              <div className={`text-xs font-medium ${s.done ? "text-gray-900" : "text-gray-400"}`}>{s.label}</div>
-              <div className="text-xs text-gray-400">{s.detail}</div>
+              <div className={`text-[10px] font-bold ${s.done?"text-gray-900":"text-gray-400"}`}>{s.label}</div>
+              <div className="text-[9px] text-gray-400">{s.detail}</div>
             </div>
           </div>
         ))}
@@ -646,30 +737,40 @@ export const FreshBoxS3: React.FC = () => (
 );
 
 // ─── PAYTRACK ──────────────────────────────────────────────
+
 export const PayTrackS1: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="PayTrack" action={<Plus size={16} className="text-violet-600" />} />
-    <div className="flex gap-2 px-4 py-2 border-b border-gray-100 bg-white">
-      {["All", "Pending", "Paid", "Overdue"].map((t, i) => (
-        <button key={t} className={`px-3 py-1 rounded-full text-xs font-medium ${i === 0 ? "bg-violet-100 text-violet-700" : "text-gray-500"}`}>{t}</button>
+  <div className="h-full flex flex-col bg-[#F5F0FF]">
+    <div className="bg-gradient-to-r from-violet-700 to-purple-600 px-4 pt-4 pb-5">
+      <div className="flex items-center justify-between mb-1">
+        <div>
+          <div className="text-white font-bold text-base">PayTrack</div>
+          <div className="text-violet-200 text-[10px]">Your billing dashboard</div>
+        </div>
+        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+          <Plus size={14} className="text-white" />
+        </div>
+      </div>
+    </div>
+    <div className="flex gap-2 px-4 py-2 border-b border-gray-100 bg-white overflow-hidden">
+      {["All","Pending","Paid","Overdue"].map((t,i)=>(
+        <button key={t} className={`px-3 py-1 rounded-full text-[10px] font-bold ${i===0?"bg-violet-100 text-violet-700":"text-gray-400"}`}>{t}</button>
       ))}
     </div>
     <div className="flex-1 px-4 pt-3 space-y-2 overflow-hidden">
       {[
-        { client: "Acme Corp", desc: "Website redesign", amount: "$3,200", status: "Paid", color: "bg-green-100 text-green-700", date: "Jun 1" },
-        { client: "StartupXYZ", desc: "Mobile app · Phase 2", amount: "$4,800", status: "Pending", color: "bg-yellow-100 text-yellow-700", date: "Jun 8" },
-        { client: "RetailCo", desc: "SEO consulting", amount: "$750", status: "Overdue", color: "bg-red-100 text-red-700", date: "May 25" },
-      ].map((inv) => (
-        <div key={inv.client} className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm">
+        {client:"Acme Corp",desc:"Website redesign",amount:"$3,200",status:"Paid",grad:"from-green-500 to-emerald-500",tag:"bg-green-100 text-green-700"},
+        {client:"StartupXYZ",desc:"Mobile app · Phase 2",amount:"$4,800",status:"Pending",grad:"",tag:"bg-yellow-100 text-yellow-700"},
+        {client:"RetailCo",desc:"SEO consulting",amount:"$750",status:"Overdue",grad:"",tag:"bg-red-100 text-red-700"},
+      ].map(inv=>(
+        <div key={inv.client} className="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm">
           <div className="flex items-start justify-between">
             <div>
-              <div className="text-xs font-bold text-gray-900">{inv.client}</div>
-              <div className="text-xs text-gray-400">{inv.desc}</div>
-              <div className="text-xs text-gray-400 mt-0.5">Due {inv.date}</div>
+              <div className="text-[10px] font-bold text-gray-900">{inv.client}</div>
+              <div className="text-[9px] text-gray-400">{inv.desc}</div>
             </div>
             <div className="text-right">
-              <div className="text-sm font-bold text-gray-900">{inv.amount}</div>
-              <StatusBadge label={inv.status} color={inv.color} />
+              <div className="text-xs font-black text-gray-900">{inv.amount}</div>
+              <Tag label={inv.status} color={inv.tag}/>
             </div>
           </div>
         </div>
@@ -680,244 +781,253 @@ export const PayTrackS1: React.FC = () => (
 
 export const PayTrackS2: React.FC = () => (
   <div className="h-full flex flex-col bg-white">
-    <AppBar title="New Invoice" />
+    <div className="bg-gradient-to-r from-violet-700 to-purple-600 px-4 pt-4 pb-4">
+      <div className="flex items-center gap-2 mb-1">
+        <ArrowLeft size={14} className="text-white/70" />
+        <span className="text-white font-bold text-sm">New Invoice</span>
+      </div>
+      <div className="text-violet-200 text-[10px]">Fill in the details below</div>
+    </div>
     <div className="flex-1 px-4 pt-4 space-y-3 overflow-hidden">
       {[
-        { label: "Client", value: "StartupXYZ", type: "select" },
-        { label: "Project", value: "Mobile App · Phase 3", type: "text" },
-        { label: "Amount", value: "$5,400.00", type: "text" },
-        { label: "Due Date", value: "Jun 30, 2025", type: "text" },
-      ].map((field) => (
+        {label:"Client",value:"StartupXYZ"},
+        {label:"Project",value:"Mobile App · Phase 3"},
+        {label:"Amount",value:"$5,400.00",highlight:true},
+        {label:"Due Date",value:"Jun 30, 2025"},
+      ].map(field=>(
         <div key={field.label}>
-          <div className="text-xs text-gray-400 mb-1">{field.label}</div>
-          <div className="border border-gray-200 rounded-xl px-3 py-2.5 text-xs text-gray-900 flex items-center justify-between bg-gray-50">
-            {field.value}
-            {field.type === "select" && <ChevronRight size={12} className="text-gray-400" />}
+          <div className="text-[9px] text-gray-400 font-semibold mb-1 uppercase tracking-wider">{field.label}</div>
+          <div className={`border rounded-xl px-3 py-2.5 text-xs font-bold flex items-center justify-between ${field.highlight?"border-violet-300 bg-violet-50 text-violet-700":"border-gray-200 text-gray-900 bg-gray-50"}`}>
+            {field.value}<ChevronRight size={12} className="text-gray-300"/>
           </div>
         </div>
       ))}
       <div>
-        <div className="text-xs text-gray-400 mb-1">Line items</div>
+        <div className="text-[9px] text-gray-400 font-semibold mb-1 uppercase tracking-wider">Line items</div>
         <div className="border border-gray-200 rounded-xl overflow-hidden">
-          {[{ desc: "UI Design", qty: "40h", price: "$2,800" }, { desc: "Development", qty: "24h", price: "$2,600" }].map((li) => (
-            <div key={li.desc} className="flex items-center justify-between px-3 py-2 border-b border-gray-100 last:border-0">
-              <span className="text-xs text-gray-700">{li.desc}</span>
-              <span className="text-xs text-gray-400">{li.qty}</span>
-              <span className="text-xs font-medium text-gray-900">{li.price}</span>
+          {[{desc:"UI Design",qty:"40h",price:"$2,800"},{desc:"Development",qty:"24h",price:"$2,600"}].map(li=>(
+            <div key={li.desc} className="flex items-center justify-between px-3 py-2 border-b border-gray-50 last:border-0">
+              <span className="text-[10px] text-gray-700 font-medium">{li.desc}</span>
+              <span className="text-[9px] text-gray-400">{li.qty}</span>
+              <span className="text-[10px] font-black text-violet-600">{li.price}</span>
             </div>
           ))}
         </div>
       </div>
     </div>
-    <div className="px-4 pb-4">
-      <button className="w-full py-3 rounded-xl bg-violet-600 text-white text-xs font-semibold">Preview & Send Invoice</button>
+    <div className="px-4 pb-4 pt-2">
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-violet-700 to-purple-600 text-white text-xs font-bold shadow-md shadow-violet-200">Preview & Send Invoice →</button>
     </div>
   </div>
 );
 
 export const PayTrackS3: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="Dashboard" />
-    <div className="px-4 pt-4 flex-1 overflow-hidden">
-      <div className="bg-violet-600 rounded-2xl p-4 mb-4 text-white">
-        <div className="text-xs text-violet-200 mb-1">Revenue this month</div>
-        <div className="text-2xl font-bold">$8,420</div>
-        <div className="text-xs text-green-300 flex items-center gap-1 mt-0.5"><TrendingUp size={10} />+12% vs last month</div>
+  <div className="h-full flex flex-col bg-[#F5F0FF]">
+    <div className="bg-gradient-to-r from-violet-700 to-purple-600 px-4 pt-4 pb-4">
+      <div className="text-white font-bold text-sm">Revenue Dashboard</div>
+      <div className="text-violet-200 text-[10px]">June 2025</div>
+    </div>
+    <div className="px-4 pt-3 flex-1 overflow-hidden">
+      <div className="bg-white rounded-2xl p-4 mb-3 shadow-md border border-violet-50">
+        <div className="text-[10px] text-gray-400 mb-1">Revenue this month</div>
+        <div className="text-2xl font-black text-violet-700">$8,420</div>
+        <div className="flex items-center gap-1 mt-1 text-[10px] text-green-600 font-bold"><TrendingUp size={10}/>+12% vs last month</div>
       </div>
-      <div className="grid grid-cols-2 gap-2 mb-4">
-        <div className="bg-white rounded-xl p-3 border border-gray-100">
-          <div className="text-xs text-gray-400">Unpaid</div>
-          <div className="text-sm font-bold text-yellow-600">$2,100</div>
-          <div className="text-xs text-gray-400">2 invoices</div>
-        </div>
-        <div className="bg-white rounded-xl p-3 border border-gray-100">
-          <div className="text-xs text-gray-400">Collected</div>
-          <div className="text-sm font-bold text-green-600">$6,320</div>
-          <div className="text-xs text-gray-400">5 invoices</div>
-        </div>
+      <div className="flex gap-2 mb-3">
+        <StatCard label="Unpaid" value="$2,100" sub="2 invoices" bg="bg-yellow-50" text="text-yellow-700"/>
+        <StatCard label="Collected" value="$6,320" sub="5 invoices" bg="bg-green-50" text="text-green-700"/>
       </div>
-      <div className="bg-white rounded-xl p-3 border border-gray-100">
-        <div className="text-xs font-semibold text-gray-700 mb-2">Top clients</div>
-        {[{ name: "Acme Corp", amount: "$3,200" }, { name: "StartupXYZ", amount: "$2,800" }].map((c) => (
-          <div key={c.name} className="flex justify-between items-center py-1.5 border-b border-gray-50 last:border-0">
-            <span className="text-xs text-gray-700">{c.name}</span>
-            <span className="text-xs font-bold text-gray-900">{c.amount}</span>
-          </div>
-        ))}
+      <div className="bg-white rounded-2xl border border-gray-100 p-3 shadow-sm">
+        <div className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-2">Monthly trend</div>
+        <div className="flex items-end justify-between gap-1 h-12">
+          {[40,55,45,70,60,85,75,90,65,100,80,95].map((h,i)=>(
+            <div key={i} className={`flex-1 rounded-sm ${i===11?"bg-violet-600":"bg-violet-200"}`} style={{height:`${h}%`}}/>
+          ))}
+        </div>
       </div>
     </div>
   </div>
 );
 
 // ─── SPLITEASY ─────────────────────────────────────────────
+
 export const SplitEasyS1: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="Mexico Trip 🏖️" />
-    <div className="px-4 pt-3 flex-1 overflow-hidden">
-      <div className="flex items-center justify-between mb-3">
-        <div className="text-xs text-gray-500">4 people · 8 expenses</div>
-        <div className="text-xs font-bold text-gray-900">Total: $1,240</div>
+  <div className="h-full flex flex-col bg-[#FAF0FF]">
+    <div className="bg-gradient-to-r from-purple-600 to-pink-500 px-4 pt-4 pb-5">
+      <div className="text-white font-bold text-base mb-0.5">Mexico Trip 🏖️</div>
+      <div className="flex items-center justify-between">
+        <div className="text-purple-100 text-[10px]">4 people · 8 expenses</div>
+        <div className="text-white font-black text-sm">$1,240</div>
       </div>
-      <div className="flex -space-x-2 mb-4">
-        {["You", "Carlos", "María", "Ana"].map((n, i) => (
-          <div key={n} className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white border-2 border-white ${["bg-violet-500","bg-blue-500","bg-pink-500","bg-green-500"][i]}`}>{n[0]}</div>
-        ))}
-      </div>
-      <div className="space-y-2">
-        {[
-          { desc: "Hotel deposit", paid: "You", amount: "$420", split: "4 people" },
-          { desc: "Dinner at El Patron", paid: "Carlos", amount: "$180", split: "4 people" },
-          { desc: "Taxi to airport", paid: "María", amount: "$64", split: "4 people" },
-          { desc: "Snorkeling tour", paid: "You", amount: "$240", split: "4 people" },
-        ].map((exp) => (
-          <div key={exp.desc} className="bg-white rounded-xl px-3 py-2.5 flex items-center justify-between border border-gray-100 shadow-sm">
-            <div>
-              <div className="text-xs font-medium text-gray-900">{exp.desc}</div>
-              <div className="text-xs text-gray-400">Paid by {exp.paid} · {exp.split}</div>
-            </div>
-            <span className="text-xs font-bold text-gray-900">{exp.amount}</span>
-          </div>
+      <div className="flex -space-x-1.5 mt-2">
+        {[{n:"Y",bg:"bg-purple-400"},{n:"C",bg:"bg-blue-400"},{n:"M",bg:"bg-pink-400"},{n:"A",bg:"bg-green-400"}].map(p=>(
+          <div key={p.n} className={`w-7 h-7 rounded-full ${p.bg} border-2 border-white flex items-center justify-center text-[10px] font-black text-white`}>{p.n}</div>
         ))}
       </div>
     </div>
-    <div className="px-4 pb-4">
-      <button className="w-full py-3 rounded-xl bg-violet-600 text-white text-xs font-semibold flex items-center justify-center gap-2"><Plus size={14} />Add Expense</button>
+    <div className="flex-1 px-4 pt-3 space-y-2 overflow-hidden">
+      {[
+        {desc:"Hotel deposit",paid:"You",amount:"$420"},
+        {desc:"Dinner at El Patron",paid:"Carlos",amount:"$180"},
+        {desc:"Taxi to airport",paid:"María",amount:"$64"},
+        {desc:"Snorkeling tour",paid:"You",amount:"$240"},
+      ].map(exp=>(
+        <div key={exp.desc} className="bg-white rounded-xl px-3 py-2.5 flex items-center justify-between border border-purple-50 shadow-sm">
+          <div>
+            <div className="text-[10px] font-bold text-gray-900">{exp.desc}</div>
+            <div className="text-[9px] text-gray-400">Paid by {exp.paid} · 4 people</div>
+          </div>
+          <span className="text-xs font-black text-purple-600">{exp.amount}</span>
+        </div>
+      ))}
+    </div>
+    <div className="px-4 pb-4 pt-2">
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-500 text-white text-xs font-bold shadow-md shadow-purple-200 flex items-center justify-center gap-2"><Plus size={14}/>Add Expense</button>
     </div>
   </div>
 );
 
 export const SplitEasyS2: React.FC = () => (
   <div className="h-full flex flex-col bg-white">
-    <AppBar title="Add Expense" />
-    <div className="flex-1 px-4 pt-4 space-y-4 overflow-hidden">
+    <div className="bg-gradient-to-r from-purple-600 to-pink-500 px-4 pt-4 pb-4">
+      <div className="flex items-center gap-2 mb-1">
+        <ArrowLeft size={14} className="text-white/70"/>
+        <span className="text-white font-bold text-sm">Add Expense</span>
+      </div>
+      <div className="text-purple-100 text-[10px]">Mexico Trip 🏖️</div>
+    </div>
+    <div className="flex-1 px-4 pt-4 space-y-3 overflow-hidden">
       <div>
-        <div className="text-xs text-gray-400 mb-1">Description</div>
-        <div className="border border-gray-200 rounded-xl px-3 py-2.5 text-xs text-gray-900 bg-gray-50">Cenote entrance + lunch</div>
+        <div className="text-[9px] text-gray-400 font-bold uppercase tracking-wider mb-1">Description</div>
+        <div className="border border-gray-200 rounded-xl px-3 py-2.5 text-[10px] text-gray-900 bg-gray-50 font-medium">Cenote entrance + lunch</div>
       </div>
       <div>
-        <div className="text-xs text-gray-400 mb-1">Amount</div>
-        <div className="border border-violet-400 rounded-xl px-3 py-2.5 text-lg font-bold text-gray-900">$85.00</div>
+        <div className="text-[9px] text-gray-400 font-bold uppercase tracking-wider mb-1">Amount</div>
+        <div className="border-2 border-purple-400 rounded-xl px-3 py-2.5 text-lg font-black text-purple-700 bg-purple-50">$85.00</div>
       </div>
       <div>
-        <div className="text-xs text-gray-400 mb-1">Paid by</div>
-        <div className="border border-gray-200 rounded-xl px-3 py-2.5 text-xs text-gray-900 bg-violet-50 flex justify-between items-center">You <ChevronRight size={12} className="text-gray-300" /></div>
+        <div className="text-[9px] text-gray-400 font-bold uppercase tracking-wider mb-1">Paid by</div>
+        <div className="border border-gray-200 rounded-xl px-3 py-2.5 text-[10px] bg-purple-50 flex justify-between items-center font-bold text-purple-700">You<ChevronRight size={12} className="text-gray-300"/></div>
       </div>
       <div>
-        <div className="text-xs text-gray-400 mb-2">Split method</div>
+        <div className="text-[9px] text-gray-400 font-bold uppercase tracking-wider mb-2">Split method</div>
         <div className="grid grid-cols-3 gap-2">
-          {["Equally", "By %", "Custom"].map((m, i) => (
-            <button key={m} className={`py-2 rounded-xl text-xs font-medium border ${i === 0 ? "bg-violet-600 text-white border-violet-600" : "border-gray-200 text-gray-600"}`}>{m}</button>
+          {["Equally","By %","Custom"].map((m,i)=>(
+            <button key={m} className={`py-2 rounded-xl text-[10px] font-bold border ${i===0?"bg-gradient-to-r from-purple-600 to-pink-500 text-white border-purple-500":"border-gray-200 text-gray-500"}`}>{m}</button>
           ))}
         </div>
       </div>
-      <div className="text-xs text-gray-400">Each person pays <strong className="text-gray-900">$21.25</strong></div>
+      <div className="bg-purple-50 border border-purple-100 rounded-xl px-3 py-2 text-center">
+        <span className="text-[10px] text-gray-500">Each person pays </span>
+        <span className="text-xs font-black text-purple-700">$21.25</span>
+      </div>
     </div>
     <div className="px-4 pb-4">
-      <button className="w-full py-3 rounded-xl bg-violet-600 text-white text-xs font-semibold">Save Expense</button>
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-500 text-white text-xs font-bold shadow-md shadow-purple-200">Save Expense →</button>
     </div>
   </div>
 );
 
 export const SplitEasyS3: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="Balances" />
-    <div className="px-4 pt-4 flex-1 overflow-hidden">
-      <div className="bg-violet-600 rounded-2xl p-4 mb-4 text-white text-center">
-        <div className="text-xs text-violet-200">You are owed</div>
-        <div className="text-2xl font-bold">$124.50</div>
+  <div className="h-full flex flex-col bg-[#FAF0FF]">
+    <div className="bg-gradient-to-r from-purple-600 to-pink-500 px-4 pt-4 pb-4">
+      <div className="text-white font-bold text-sm">Balances</div>
+      <div className="text-purple-100 text-[10px]">Mexico Trip 🏖️</div>
+    </div>
+    <div className="px-4 pt-3 flex-1 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-md p-4 mb-3 text-center border border-purple-50">
+        <div className="text-[10px] text-gray-400 mb-0.5">You are owed</div>
+        <div className="text-2xl font-black text-purple-700">$124.50</div>
       </div>
-      <div className="space-y-2 mb-4">
+      <div className="space-y-2 mb-3">
         {[
-          { name: "Carlos R.", owes: "owes you", amount: "$67.00", color: "bg-blue-100 text-blue-700" },
-          { name: "María G.", owes: "owes you", amount: "$57.50", color: "bg-pink-100 text-pink-700" },
-          { name: "Ana L.", owes: "is settled", amount: "$0.00", color: "bg-green-100 text-green-700" },
-        ].map((b) => (
+          {name:"Carlos R.",owes:"owes you",amount:"$67.00",bg:"bg-blue-500"},
+          {name:"María G.",owes:"owes you",amount:"$57.50",bg:"bg-pink-500"},
+          {name:"Ana L.",owes:"settled up",amount:"$0",bg:"bg-green-500"},
+        ].map(b=>(
           <div key={b.name} className="bg-white rounded-xl px-3 py-2.5 flex items-center gap-3 border border-gray-100 shadow-sm">
-            <Avatar name={b.name} color={b.color} />
+            <AvatarCircle initials={b.name[0]} bg={b.bg}/>
             <div className="flex-1">
-              <div className="text-xs font-medium text-gray-900">{b.name}</div>
-              <div className="text-xs text-gray-400">{b.owes}</div>
+              <div className="text-[10px] font-bold text-gray-900">{b.name}</div>
+              <div className="text-[9px] text-gray-400">{b.owes}</div>
             </div>
             <div className="text-right">
-              <div className="text-xs font-bold text-gray-900">{b.amount}</div>
-              {b.amount !== "$0.00" && <button className="text-xs text-violet-600 font-medium">Remind</button>}
+              <div className="text-[10px] font-black text-gray-900">{b.amount}</div>
+              {b.amount!=="$0"&&<button className="text-[9px] text-purple-600 font-bold">Remind</button>}
             </div>
           </div>
         ))}
       </div>
-      <button className="w-full py-3 rounded-xl bg-violet-600 text-white text-xs font-semibold flex items-center justify-center gap-2"><Scale size={14} />Settle up</button>
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-500 text-white text-xs font-bold shadow-md shadow-purple-200 flex items-center justify-center gap-2"><Scale size={14}/>Settle up</button>
     </div>
   </div>
 );
 
 // ─── STOREDESK ─────────────────────────────────────────────
+
 export const StoreDeskS1: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <div className="bg-white px-4 py-3 border-b border-gray-100">
-      <div className="text-sm font-bold text-gray-900">New Sale</div>
-      <div className="text-xs text-gray-400">Tap a product to add</div>
+  <div className="h-full flex flex-col bg-[#F0F1FF]">
+    <div className="bg-gradient-to-r from-slate-700 to-blue-600 px-4 pt-3 pb-3">
+      <div className="text-white font-bold text-sm">New Sale</div>
+      <div className="text-slate-300 text-[10px]">Tap to add · $0.00</div>
     </div>
     <div className="px-3 py-2 bg-white border-b border-gray-100">
       <div className="bg-gray-100 rounded-xl flex items-center gap-2 px-3 py-2">
-        <Search size={12} className="text-gray-400" /><span className="text-xs text-gray-400">Search or scan barcode...</span>
+        <Search size={11} className="text-gray-400"/><span className="text-[10px] text-gray-400">Search or scan barcode…</span>
       </div>
     </div>
     <div className="flex-1 px-3 pt-2 overflow-hidden">
-      <div className="grid grid-cols-3 gap-2 mb-3">
-        {[
-          { name: "Café", price: "$3.50", emoji: "☕" },
-          { name: "Croissant", price: "$2.80", emoji: "🥐" },
-          { name: "Sandwich", price: "$5.20", emoji: "🥪" },
-          { name: "Juice", price: "$4.00", emoji: "🍊" },
-          { name: "Water", price: "$1.50", emoji: "💧" },
-          { name: "Cookie", price: "$1.80", emoji: "🍪" },
-        ].map((p) => (
-          <div key={p.name} className="bg-white rounded-xl p-2 flex flex-col items-center border border-gray-100 shadow-sm">
-            <div className="text-xl mb-1">{p.emoji}</div>
-            <div className="text-xs font-medium text-gray-900">{p.name}</div>
-            <div className="text-xs text-violet-600 font-bold">{p.price}</div>
+      <div className="grid grid-cols-3 gap-1.5 mb-2">
+        {[{n:"Café",p:"$3.50",e:"☕"},{n:"Croissant",p:"$2.80",e:"🥐"},{n:"Sandwich",p:"$5.20",e:"🥪"},{n:"Juice",p:"$4.00",e:"🍊"},{n:"Water",p:"$1.50",e:"💧"},{n:"Cookie",p:"$1.80",e:"🍪"}].map(p=>(
+          <div key={p.n} className="bg-white rounded-xl p-2 flex flex-col items-center border border-gray-100 shadow-sm">
+            <div className="text-xl mb-0.5">{p.e}</div>
+            <div className="text-[9px] font-bold text-gray-900">{p.n}</div>
+            <div className="text-[9px] text-blue-600 font-black">{p.p}</div>
           </div>
         ))}
       </div>
       <div className="bg-white rounded-xl border border-gray-100 p-3 shadow-sm">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-xs font-semibold text-gray-900">Cart (3 items)</span>
-          <span className="text-xs text-red-400 font-medium">Clear</span>
+        <div className="flex justify-between items-center mb-1.5">
+          <span className="text-[10px] font-bold text-gray-900">Cart (3 items)</span>
+          <span className="text-[9px] text-red-400 font-bold">Clear</span>
         </div>
-        <div className="flex justify-between text-sm font-bold text-gray-900 pt-1 border-t border-gray-100">
-          <span>Total</span><span>$11.50</span>
+        <div className="flex justify-between text-xs font-black text-gray-900 pt-1.5 border-t border-gray-100">
+          <span>Total</span><span className="text-blue-600">$11.50</span>
         </div>
       </div>
     </div>
-    <div className="px-3 pb-3">
-      <button className="w-full py-3 rounded-xl bg-violet-600 text-white text-xs font-semibold">Charge $11.50</button>
+    <div className="px-3 pb-3 pt-2">
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-slate-700 to-blue-600 text-white text-xs font-bold shadow-md">Charge $11.50 →</button>
     </div>
   </div>
 );
 
 export const StoreDeskS2: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="Inventory" action={<Plus size={14} className="text-violet-600" />} />
+  <div className="h-full flex flex-col bg-[#F0F1FF]">
+    <div className="bg-gradient-to-r from-slate-700 to-blue-600 px-4 pt-4 pb-3">
+      <div className="text-white font-bold text-sm">Inventory</div>
+      <div className="text-slate-300 text-[10px]">4 products · 2 alerts</div>
+    </div>
     <div className="px-3 py-2 bg-white border-b border-gray-100">
       <div className="bg-gray-100 rounded-xl flex items-center gap-2 px-3 py-2">
-        <Search size={12} className="text-gray-400" /><span className="text-xs text-gray-400">Search products...</span>
+        <Search size={11} className="text-gray-400"/><span className="text-[10px] text-gray-400">Search products…</span>
       </div>
     </div>
     <div className="flex-1 px-4 pt-3 space-y-2 overflow-hidden">
       {[
-        { name: "Café Americano", sku: "CAF-001", stock: 142, price: "$3.50", status: "OK" },
-        { name: "Croissant", sku: "PAN-003", stock: 8, price: "$2.80", status: "LOW" },
-        { name: "Sandwich Club", sku: "SAN-007", stock: 23, price: "$5.20", status: "OK" },
-        { name: "Orange Juice", sku: "JUI-002", stock: 3, price: "$4.00", status: "CRITICAL" },
-      ].map((p) => (
+        {name:"Café Americano",sku:"CAF-001",stock:142,price:"$3.50",status:"OK",color:"bg-green-100 text-green-700"},
+        {name:"Croissant",sku:"PAN-003",stock:8,price:"$2.80",status:"LOW",color:"bg-yellow-100 text-yellow-700"},
+        {name:"Sandwich Club",sku:"SAN-007",stock:23,price:"$5.20",status:"OK",color:"bg-green-100 text-green-700"},
+        {name:"Orange Juice",sku:"JUI-002",stock:3,price:"$4.00",status:"CRITICAL",color:"bg-red-100 text-red-700"},
+      ].map(p=>(
         <div key={p.name} className="bg-white rounded-xl px-3 py-2.5 flex items-center gap-3 border border-gray-100 shadow-sm">
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-semibold text-gray-900">{p.name}</div>
-            <div className="text-xs text-gray-400">{p.sku} · {p.price}</div>
+            <div className="text-[10px] font-bold text-gray-900">{p.name}</div>
+            <div className="text-[9px] text-gray-400">{p.sku} · {p.price}</div>
           </div>
           <div className="text-right">
-            <div className="text-xs font-bold text-gray-900">{p.stock} units</div>
-            <StatusBadge label={p.status} color={p.status === "OK" ? "bg-green-100 text-green-700" : p.status === "LOW" ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"} />
+            <div className="text-[10px] font-black text-gray-900">{p.stock} units</div>
+            <Tag label={p.status} color={p.color}/>
           </div>
         </div>
       ))}
@@ -926,31 +1036,34 @@ export const StoreDeskS2: React.FC = () => (
 );
 
 export const StoreDeskS3: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="Sales Report" />
-    <div className="px-4 pt-4 flex-1 overflow-hidden">
-      <div className="bg-violet-600 rounded-2xl p-4 mb-4 text-white">
-        <div className="text-xs text-violet-200">Today's revenue</div>
-        <div className="text-2xl font-bold">$3,450</div>
-        <div className="text-xs text-green-300 flex items-center gap-1 mt-0.5"><TrendingUp size={10} />+8% vs yesterday</div>
+  <div className="h-full flex flex-col bg-[#F0F1FF]">
+    <div className="bg-gradient-to-r from-slate-700 to-blue-600 px-4 pt-4 pb-4">
+      <div className="text-white font-bold text-sm">Sales Report</div>
+      <div className="text-slate-300 text-[10px]">Today · Jun 6</div>
+    </div>
+    <div className="px-4 pt-3 flex-1 overflow-hidden">
+      <div className="bg-white rounded-2xl p-4 mb-3 shadow-md border border-blue-50">
+        <div className="text-[10px] text-gray-400 mb-0.5">Today's revenue</div>
+        <div className="text-2xl font-black text-blue-700">$3,450</div>
+        <div className="flex items-center gap-1 mt-1 text-[10px] text-green-600 font-bold"><TrendingUp size={10}/>+8% vs yesterday</div>
       </div>
-      <div className="bg-white rounded-xl border border-gray-100 p-3 mb-3 shadow-sm">
-        <div className="text-xs font-semibold text-gray-700 mb-3">Hourly sales</div>
-        <div className="flex items-end justify-between gap-1 h-16">
-          {[30, 45, 60, 80, 95, 70, 55, 85, 100, 65].map((h, i) => (
-            <div key={i} className={`flex-1 rounded-sm ${i === 8 ? "bg-violet-600" : "bg-violet-200"}`} style={{ height: `${h}%` }} />
+      <div className="bg-white rounded-2xl border border-gray-100 p-3 mb-3 shadow-sm">
+        <div className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-2">Hourly sales</div>
+        <div className="flex items-end justify-between gap-0.5 h-14">
+          {[30,45,60,80,95,70,55,85,100,65].map((h,i)=>(
+            <div key={i} className={`flex-1 rounded-sm ${i===8?"bg-gradient-to-t from-blue-600 to-blue-400":"bg-blue-100"}`} style={{height:`${h}%`}}/>
           ))}
         </div>
-        <div className="flex justify-between text-[9px] text-gray-400 mt-1"><span>8am</span><span>12pm</span><span>5pm</span></div>
+        <div className="flex justify-between text-[8px] text-gray-300 mt-1"><span>8am</span><span>12pm</span><span>5pm</span></div>
       </div>
-      <div className="bg-white rounded-xl border border-gray-100 p-3 shadow-sm">
-        <div className="text-xs font-semibold text-gray-700 mb-2">Top products</div>
-        {[{ name: "Café", sales: 128, revenue: "$448" }, { name: "Sandwich", sales: 64, revenue: "$333" }, { name: "Croissant", sales: 89, revenue: "$249" }].map((p, i) => (
+      <div className="bg-white rounded-2xl border border-gray-100 p-3 shadow-sm">
+        <div className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Top products</div>
+        {[{name:"Café",sales:128,revenue:"$448"},{name:"Sandwich",sales:64,revenue:"$333"},{name:"Croissant",sales:89,revenue:"$249"}].map((p,i)=>(
           <div key={p.name} className="flex items-center gap-2 py-1.5 border-b border-gray-50 last:border-0">
-            <span className="text-xs text-gray-400 font-bold w-4">#{i + 1}</span>
-            <span className="flex-1 text-xs text-gray-700">{p.name}</span>
-            <span className="text-xs text-gray-400">{p.sales} sold</span>
-            <span className="text-xs font-bold text-gray-900">{p.revenue}</span>
+            <span className={`text-[9px] font-black w-4 ${["text-yellow-500","text-gray-400","text-amber-700"][i]}`}>#{i+1}</span>
+            <span className="flex-1 text-[10px] text-gray-700 font-medium">{p.name}</span>
+            <span className="text-[9px] text-gray-400">{p.sales} sold</span>
+            <span className="text-[10px] font-black text-blue-600">{p.revenue}</span>
           </div>
         ))}
       </div>
@@ -959,32 +1072,36 @@ export const StoreDeskS3: React.FC = () => (
 );
 
 // ─── MINDSPACE ─────────────────────────────────────────────
+
 export const MindSpaceS1: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="MindSpace" />
-    <div className="px-4 py-3 bg-white border-b border-gray-100">
-      <div className="text-xs text-gray-500 mb-2">How are you feeling today?</div>
-      <div className="flex gap-2 flex-wrap">
-        {["😔 Anxious", "😞 Sad", "😤 Stressed", "😶 Numb"].map((m, i) => (
-          <span key={m} className={`px-3 py-1 rounded-full text-xs font-medium border ${i === 0 ? "bg-blue-100 border-blue-300 text-blue-700" : "bg-white border-gray-200 text-gray-600"}`}>{m}</span>
+  <div className="h-full flex flex-col bg-[#F0F7FF]">
+    <div className="bg-gradient-to-r from-sky-600 to-teal-500 px-4 pt-4 pb-5">
+      <div className="text-white font-bold text-base mb-0.5">MindSpace</div>
+      <div className="text-sky-100 text-[10px]">Mental health, made accessible</div>
+    </div>
+    <div className="px-4 pt-3 bg-white border-b border-gray-100 pb-3">
+      <div className="text-[10px] text-gray-500 font-semibold mb-2">How are you feeling today?</div>
+      <div className="flex gap-1.5 flex-wrap">
+        {["😔 Anxious","😞 Sad","😤 Stressed","😶 Numb"].map((m,i)=>(
+          <span key={m} className={`px-2.5 py-1 rounded-full text-[9px] font-bold border ${i===0?"bg-sky-100 border-sky-300 text-sky-700":"bg-gray-50 border-gray-200 text-gray-500"}`}>{m}</span>
         ))}
       </div>
     </div>
     <div className="flex-1 px-4 pt-3 space-y-2 overflow-hidden">
-      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Available therapists</div>
+      <div className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-1">Available now</div>
       {[
-        { name: "Dr. Ana Ruiz", spec: "Anxiety & Depression", avail: "Today 4:00 PM", price: "$80/session", color: "bg-blue-100 text-blue-700" },
-        { name: "Dr. Pedro Salas", spec: "Trauma & PTSD", avail: "Today 6:00 PM", price: "$90/session", color: "bg-teal-100 text-teal-700" },
-        { name: "Dr. Laura Vega", spec: "Relationships", avail: "Tomorrow 10am", price: "$75/session", color: "bg-purple-100 text-purple-700" },
-      ].map((t) => (
+        {name:"Dr. Ana Ruiz",spec:"Anxiety & Depression",avail:"Today 4:00 PM",price:"$80",bg:"bg-sky-500"},
+        {name:"Dr. Pedro Salas",spec:"Trauma & PTSD",avail:"Today 6:00 PM",price:"$90",bg:"bg-teal-500"},
+        {name:"Dr. Laura Vega",spec:"Relationships",avail:"Tomorrow 10am",price:"$75",bg:"bg-blue-500"},
+      ].map(t=>(
         <div key={t.name} className="bg-white rounded-xl p-3 flex items-center gap-3 border border-gray-100 shadow-sm">
-          <Avatar name={t.name.split(" ")[1]} color={t.color} />
+          <AvatarCircle initials={t.name.split(" ")[1][0]} bg={t.bg}/>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-semibold text-gray-900">{t.name}</div>
-            <div className="text-xs text-gray-400">{t.spec}</div>
-            <div className="text-xs text-green-600 font-medium mt-0.5">{t.avail}</div>
+            <div className="text-[10px] font-bold text-gray-900">{t.name}</div>
+            <div className="text-[9px] text-gray-400">{t.spec}</div>
+            <div className="text-[9px] text-green-600 font-bold mt-0.5">{t.avail}</div>
           </div>
-          <div className="text-xs font-bold text-gray-700 shrink-0">{t.price}</div>
+          <div className="text-xs font-black text-sky-600 shrink-0">{t.price}</div>
         </div>
       ))}
     </div>
@@ -993,89 +1110,103 @@ export const MindSpaceS1: React.FC = () => (
 
 export const MindSpaceS2: React.FC = () => (
   <div className="h-full flex flex-col bg-white">
-    <AppBar title="Therapist Profile" />
-    <div className="flex flex-col items-center px-4 pt-4 pb-3 border-b border-gray-100">
-      <div className="w-16 h-16 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-2xl font-bold mb-2">A</div>
-      <div className="text-sm font-bold text-gray-900">Dr. Ana Ruiz</div>
-      <div className="text-xs text-gray-500 mb-1">Anxiety & Depression Specialist</div>
-      <RatingRow rating="4.9" count="214 sessions" />
-      <div className="flex gap-3 mt-2">
-        <div className="text-center"><div className="text-sm font-bold text-gray-900">8</div><div className="text-xs text-gray-400">Years exp.</div></div>
-        <div className="w-px bg-gray-200" />
-        <div className="text-center"><div className="text-sm font-bold text-gray-900">214</div><div className="text-xs text-gray-400">Sessions</div></div>
-        <div className="w-px bg-gray-200" />
-        <div className="text-center"><div className="text-sm font-bold text-gray-900">$80</div><div className="text-xs text-gray-400">/ session</div></div>
+    <div className="bg-gradient-to-br from-sky-600 to-teal-500 px-4 pt-4 pb-8">
+      <div className="flex items-center gap-2 mb-3">
+        <ArrowLeft size={14} className="text-white/70"/>
+        <span className="text-white/70 text-xs">Results</span>
+      </div>
+      <div className="flex items-center gap-3">
+        <div className="w-14 h-14 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center text-2xl font-bold text-white">A</div>
+        <div>
+          <div className="text-white font-bold text-sm">Dr. Ana Ruiz</div>
+          <div className="text-sky-100 text-[10px]">Anxiety & Depression Specialist</div>
+          <div className="flex items-center gap-1 mt-0.5"><Stars/><span className="text-white text-[10px]">4.9</span><span className="text-white/60 text-[10px]">(214)</span></div>
+        </div>
       </div>
     </div>
-    <div className="flex-1 px-4 py-3 overflow-hidden">
-      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Specialties</div>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {["Anxiety", "Depression", "Burnout", "Self-esteem"].map((s) => <span key={s} className="px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">{s}</span>)}
-      </div>
-      <div className="bg-green-50 border border-green-200 rounded-xl px-3 py-2 flex items-center justify-between">
-        <span className="text-xs text-green-800 font-medium">Next available: Today 4:00 PM</span>
-        <ChevronRight size={12} className="text-green-500" />
+    <div className="px-4 -mt-4 mb-3">
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-3 flex gap-3">
+        {[{l:"Experience",v:"8 yrs",c:"text-sky-600"},{l:"Sessions",v:"214",c:"text-gray-700"},{l:"Per session",v:"$80",c:"text-teal-600"}].map(s=>(
+          <div key={s.l} className="flex-1 text-center">
+            <div className={`text-sm font-black ${s.c}`}>{s.v}</div>
+            <div className="text-[9px] text-gray-400">{s.l}</div>
+          </div>
+        ))}
       </div>
     </div>
-    <div className="px-4 pb-4">
-      <button className="w-full py-3 rounded-xl bg-blue-600 text-white text-xs font-semibold">Book Session · $80</button>
+    <div className="flex-1 px-4 overflow-hidden">
+      <div className="text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-2">Specialties</div>
+      <div className="flex flex-wrap gap-1.5 mb-3">
+        {["Anxiety","Depression","Burnout","Self-esteem"].map(s=>(
+          <span key={s} className="px-2.5 py-1 bg-sky-50 text-sky-700 rounded-full text-[10px] font-bold border border-sky-100">{s}</span>
+        ))}
+      </div>
+      <div className="bg-green-50 border border-green-200 rounded-xl px-3 py-2.5 flex items-center justify-between">
+        <div>
+          <div className="text-[10px] font-bold text-green-800">Next available</div>
+          <div className="text-[9px] text-green-600">Today · 4:00 PM</div>
+        </div>
+        <ChevronRight size={14} className="text-green-400"/>
+      </div>
+    </div>
+    <div className="px-4 pb-4 pt-2">
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-sky-600 to-teal-500 text-white text-xs font-bold shadow-md shadow-sky-200">Book Session · $80 →</button>
     </div>
   </div>
 );
 
 export const MindSpaceS3: React.FC = () => (
   <div className="h-full flex flex-col bg-white">
-    <AppBar title="Session Confirmed" />
-    <div className="flex-1 flex flex-col items-center px-4 pt-6 pb-4">
-      <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center mb-3">
-        <CheckCircle size={28} className="text-blue-500" />
+    <div className="bg-gradient-to-br from-sky-600 to-teal-500 px-4 pt-6 pb-8 flex flex-col items-center">
+      <div className="w-14 h-14 rounded-full bg-white/20 border-2 border-white/50 flex items-center justify-center mb-2">
+        <Heart size={26} className="text-white fill-white/60" />
       </div>
-      <div className="text-sm font-bold text-gray-900 mb-1">You're all set!</div>
-      <div className="text-xs text-gray-500 mb-5 text-center">Your session with Dr. Ana Ruiz is confirmed.</div>
-      <div className="w-full bg-gray-50 rounded-2xl p-4 space-y-3 border border-gray-100 mb-4">
-        {[
-          { label: "Therapist", value: "Dr. Ana Ruiz" },
-          { label: "Date", value: "Thursday, Jun 6" },
-          { label: "Time", value: "4:00 PM – 5:00 PM" },
-          { label: "Format", value: "Video call" },
-          { label: "Cost", value: "$80" },
-        ].map((item) => (
-          <div key={item.label} className="flex justify-between">
-            <span className="text-xs text-gray-400">{item.label}</span>
-            <span className="text-xs font-medium text-gray-900">{item.value}</span>
+      <div className="text-white font-bold text-base">You're all set!</div>
+      <div className="text-sky-100 text-[10px] mt-1 text-center">Session with Dr. Ana Ruiz is confirmed</div>
+    </div>
+    <div className="flex-1 px-4 -mt-3">
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 mb-3 space-y-2.5">
+        {[{l:"Therapist",v:"Dr. Ana Ruiz"},{l:"Date",v:"Thursday, Jun 6"},{l:"Time",v:"4:00 PM – 5:00 PM"},{l:"Format",v:"Video call"},{l:"Cost",v:"$80"}].map(i=>(
+          <div key={i.l} className="flex justify-between">
+            <span className="text-[10px] text-gray-400">{i.l}</span>
+            <span className="text-[10px] font-bold text-gray-900">{i.v}</span>
           </div>
         ))}
       </div>
-      <div className="w-full bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4">
-        <div className="text-xs font-semibold text-blue-800 mb-1">Preparation tips</div>
-        <div className="text-xs text-blue-700">Find a quiet, private space. Have water nearby. It's ok to feel nervous — you got this 💙</div>
+      <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 mb-3">
+        <div className="text-[10px] font-bold text-sky-800 mb-1">Preparation tips</div>
+        <div className="text-[9px] text-sky-700 leading-relaxed">Find a quiet space. Have water nearby. It's ok to feel nervous — you got this 💙</div>
       </div>
-      <button className="w-full py-3 rounded-xl bg-gray-200 text-gray-500 text-xs font-semibold" disabled>Join Session (available 5 min before)</button>
+      <button className="w-full py-3 rounded-2xl bg-gray-100 text-gray-400 text-xs font-bold" disabled>Join Session (available 5 min before)</button>
     </div>
   </div>
 );
 
 // ─── FITCOACH ──────────────────────────────────────────────
+
 export const FitCoachS1: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="FitCoach" />
-    <div className="flex gap-2 px-4 py-2 border-b border-gray-100 bg-white overflow-hidden">
-      {["All", "Strength", "HIIT", "Yoga", "Running"].map((c, i) => <Pill key={c} label={c} active={i === 0} />)}
+  <div className="h-full flex flex-col bg-[#FFF4F0]">
+    <div className="bg-gradient-to-r from-orange-500 to-red-500 px-4 pt-4 pb-5">
+      <div className="text-white font-bold text-base mb-0.5">FitCoach</div>
+      <div className="text-orange-100 text-[10px]">Your trainer in your pocket</div>
     </div>
-    <div className="flex-1 px-4 pt-3 space-y-3 overflow-hidden">
+    <div className="flex gap-2 px-4 py-2 bg-white border-b border-gray-100 overflow-hidden">
+      {["All","Strength","HIIT","Yoga","Run"].map((c,i)=><Chip key={c} label={c} active={i===0} color="bg-orange-500 text-white"/>)}
+    </div>
+    <div className="flex-1 px-4 pt-3 space-y-2 overflow-hidden">
       {[
-        { name: "Marco Silva", spec: "Strength & Hypertrophy", sessions: "340 sessions", price: "$45/hr", rating: "4.9", color: "bg-orange-100 text-orange-700" },
-        { name: "Elena Torres", spec: "HIIT & Cardio", sessions: "218 sessions", price: "$38/hr", rating: "4.8", color: "bg-pink-100 text-pink-700" },
-        { name: "Andrés Paz", spec: "Yoga & Mobility", sessions: "187 sessions", price: "$35/hr", rating: "4.7", color: "bg-teal-100 text-teal-700" },
-      ].map((c) => (
-        <div key={c.name} className="bg-white rounded-xl p-3 flex items-center gap-3 border border-gray-100 shadow-sm">
-          <Avatar name={c.name} color={c.color} />
+        {name:"Marco Silva",spec:"Strength & Hypertrophy",r:"4.9",sessions:"340",price:"$45/hr",bg:"bg-orange-500"},
+        {name:"Elena Torres",spec:"HIIT & Cardio",r:"4.8",sessions:"218",price:"$38/hr",bg:"bg-red-500"},
+        {name:"Andrés Paz",spec:"Yoga & Mobility",r:"4.7",sessions:"187",price:"$35/hr",bg:"bg-pink-500"},
+      ].map(c=>(
+        <div key={c.name} className="bg-white rounded-2xl p-3 flex items-center gap-3 border border-gray-100 shadow-sm">
+          <AvatarCircle initials={c.name[0]} bg={c.bg}/>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-semibold text-gray-900">{c.name}</div>
-            <div className="text-xs text-gray-400">{c.spec}</div>
-            <div className="flex items-center gap-1"><span className="text-xs text-yellow-400">★</span><span className="text-xs text-gray-500">{c.rating}</span><span className="text-xs text-gray-300">·</span><span className="text-xs text-gray-400">{c.sessions}</span></div>
+            <div className="text-[10px] font-bold text-gray-900">{c.name}</div>
+            <div className="text-[9px] text-gray-400">{c.spec}</div>
+            <div className="flex items-center gap-1 mt-0.5"><Stars/><span className="text-[10px] text-gray-500 font-medium">{c.r}</span><span className="text-[10px] text-gray-300">·</span><span className="text-[9px] text-gray-400">{c.sessions} sessions</span></div>
           </div>
-          <div className="text-xs font-bold text-violet-600 shrink-0">{c.price}</div>
+          <div className="text-xs font-black text-orange-500 shrink-0">{c.price}</div>
         </div>
       ))}
     </div>
@@ -1084,33 +1215,33 @@ export const FitCoachS1: React.FC = () => (
 
 export const FitCoachS2: React.FC = () => (
   <div className="h-full flex flex-col bg-white">
-    <AppBar title="Today's Workout" />
-    <div className="px-4 pt-3 pb-2 border-b border-gray-100">
-      <div className="text-sm font-bold text-gray-900">Week 2 · Build Phase</div>
-      <div className="text-xs text-gray-400">Monday — Upper Body</div>
+    <div className="bg-gradient-to-r from-orange-500 to-red-500 px-4 pt-4 pb-4">
+      <div className="text-white font-bold text-sm">Today's Workout</div>
+      <div className="text-orange-100 text-[10px]">Week 2 · Monday — Upper Body</div>
     </div>
-    <div className="flex gap-1 px-4 py-2 overflow-hidden border-b border-gray-50">
-      {["Mon", "Tue", "Wed", "Thu", "Fri"].map((d, i) => (
-        <div key={d} className={`flex-1 flex flex-col items-center py-1.5 rounded-lg ${i === 0 ? "bg-violet-600 text-white" : "text-gray-500"}`}>
-          <div className="text-[10px] font-medium">{d}</div>
-          {i === 0 && <div className="w-1 h-1 rounded-full bg-white mt-0.5" />}
+    <div className="flex gap-1 px-4 py-2 border-b border-gray-100 overflow-hidden">
+      {["Mon","Tue","Wed","Thu","Fri"].map((d,i)=>(
+        <div key={d} className={`flex-1 flex flex-col items-center py-1.5 rounded-lg ${i===0?"bg-gradient-to-b from-orange-500 to-red-500 text-white":"text-gray-400"}`}>
+          <div className="text-[9px] font-bold">{d}</div>
+          {i===0&&<div className="w-1 h-1 rounded-full bg-white mt-0.5"/>}
+          {i===2&&<div className="w-1 h-1 rounded-full bg-orange-300 mt-0.5"/>}
         </div>
       ))}
     </div>
     <div className="flex-1 px-4 pt-3 space-y-2 overflow-hidden">
       {[
-        { exercise: "Barbell Squat", sets: "3 sets × 12 reps", weight: "60 kg" },
-        { exercise: "Romanian Deadlift", sets: "3 sets × 8 reps", weight: "70 kg" },
-        { exercise: "Plank Hold", sets: "3 sets × 45 sec", weight: "Bodyweight" },
-        { exercise: "Push-ups", sets: "3 sets × 15 reps", weight: "Bodyweight" },
-      ].map((ex, i) => (
-        <div key={ex.exercise} className="flex items-center gap-3 py-2 border-b border-gray-50">
-          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i < 2 ? "bg-violet-600 text-white" : "bg-gray-100 text-gray-500"}`}>{i + 1}</div>
+        {exercise:"Barbell Squat",sets:"3 × 12 reps",weight:"60 kg",done:true},
+        {exercise:"Romanian Deadlift",sets:"3 × 8 reps",weight:"70 kg",done:true},
+        {exercise:"Plank Hold",sets:"3 × 45 sec",weight:"BW",done:false},
+        {exercise:"Push-ups",sets:"3 × 15 reps",weight:"BW",done:false},
+      ].map((ex,i)=>(
+        <div key={ex.exercise} className={`flex items-center gap-3 py-2.5 px-3 rounded-xl ${ex.done?"bg-orange-50 border border-orange-100":"bg-gray-50 border border-gray-100"}`}>
+          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-black shrink-0 ${ex.done?"bg-gradient-to-br from-orange-500 to-red-500 text-white":"bg-gray-200 text-gray-400"}`}>{ex.done?<Check size={10}/>:i+1}</div>
           <div className="flex-1">
-            <div className="text-xs font-semibold text-gray-900">{ex.exercise}</div>
-            <div className="text-xs text-gray-400">{ex.sets}</div>
+            <div className={`text-[10px] font-bold ${ex.done?"text-orange-700":"text-gray-700"}`}>{ex.exercise}</div>
+            <div className="text-[9px] text-gray-400">{ex.sets}</div>
           </div>
-          <span className="text-xs font-medium text-gray-600 shrink-0">{ex.weight}</span>
+          <span className="text-[9px] font-bold text-gray-500 shrink-0">{ex.weight}</span>
         </div>
       ))}
     </div>
@@ -1118,40 +1249,42 @@ export const FitCoachS2: React.FC = () => (
 );
 
 export const FitCoachS3: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="Progress" />
-    <div className="px-4 pt-4 flex-1 overflow-hidden">
-      <div className="grid grid-cols-3 gap-2 mb-4">
-        <div className="bg-white rounded-xl p-2 text-center border border-gray-100 shadow-sm">
-          <div className="text-sm font-bold text-violet-600">18</div>
-          <div className="text-[10px] text-gray-400">Workouts</div>
+  <div className="h-full flex flex-col bg-[#FFF4F0]">
+    <div className="bg-gradient-to-r from-orange-500 to-red-500 px-4 pt-4 pb-4">
+      <div className="text-white font-bold text-sm">Your Progress</div>
+      <div className="text-orange-100 text-[10px]">June 2025</div>
+    </div>
+    <div className="px-4 pt-3 flex-1 overflow-hidden">
+      <div className="flex gap-2 mb-3">
+        <div className="flex-1 bg-white rounded-2xl p-3 text-center border border-orange-100 shadow-sm">
+          <div className="text-base font-black text-orange-500">18</div>
+          <div className="text-[9px] text-gray-400">Workouts</div>
         </div>
-        <div className="bg-white rounded-xl p-2 text-center border border-gray-100 shadow-sm">
-          <div className="text-sm font-bold text-orange-500">12</div>
-          <div className="text-[10px] text-gray-400">Day streak</div>
+        <div className="flex-1 bg-white rounded-2xl p-3 text-center border border-orange-100 shadow-sm">
+          <div className="text-base font-black text-red-500">🔥 12</div>
+          <div className="text-[9px] text-gray-400">Day streak</div>
         </div>
-        <div className="bg-white rounded-xl p-2 text-center border border-gray-100 shadow-sm">
-          <div className="text-sm font-bold text-green-600">-2.4kg</div>
-          <div className="text-[10px] text-gray-400">This month</div>
+        <div className="flex-1 bg-white rounded-2xl p-3 text-center border border-orange-100 shadow-sm">
+          <div className="text-base font-black text-green-600">-2.4kg</div>
+          <div className="text-[9px] text-gray-400">This month</div>
         </div>
       </div>
-      <div className="bg-white rounded-xl border border-gray-100 p-3 mb-3 shadow-sm">
-        <div className="text-xs font-semibold text-gray-700 mb-2">Weight this month</div>
-        <div className="flex items-end justify-between gap-1 h-16">
-          {[82, 81.8, 81.5, 81.2, 81, 80.8, 80.5, 80.2, 79.9, 79.6].map((w, i) => {
-            const h = ((82 - w) / (82 - 79.6)) * 100;
-            return <div key={i} className="flex-1 bg-violet-200 rounded-sm" style={{ height: `${Math.max(10, h)}%` }} />;
+      <div className="bg-white rounded-2xl border border-gray-100 p-3 mb-3 shadow-sm">
+        <div className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-2">Weight trend</div>
+        <div className="flex items-end justify-between gap-0.5 h-12">
+          {[82,81.8,81.5,81.2,81,80.8,80.5,80.2,79.9,79.6].map((w,i)=>{
+            const h=((82-w)/(82-79.6))*100;
+            return <div key={i} className={`flex-1 rounded-sm ${i===9?"bg-gradient-to-t from-orange-500 to-red-400":"bg-orange-200"}`} style={{height:`${Math.max(10,h)}%`}}/>;
           })}
         </div>
-        <div className="flex justify-between text-[9px] text-gray-400 mt-1"><span>82 kg</span><span>79.6 kg</span></div>
       </div>
-      <div className="bg-white rounded-xl border border-gray-100 p-3 shadow-sm">
-        <div className="text-xs font-semibold text-gray-700 mb-2">Achievements</div>
+      <div className="bg-white rounded-2xl border border-gray-100 p-3 shadow-sm">
+        <div className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-2">Achievements</div>
         <div className="flex gap-2">
-          {[{ icon: "🔥", label: "10 streak" }, { icon: "💪", label: "First PR" }, { icon: "⭐", label: "Perfect week" }].map((a) => (
-            <div key={a.label} className="flex-1 flex flex-col items-center gap-1 bg-yellow-50 border border-yellow-200 rounded-xl py-2">
-              <span className="text-lg">{a.icon}</span>
-              <span className="text-[9px] text-gray-600 font-medium text-center">{a.label}</span>
+          {[{icon:"🔥",label:"10 streak"},{icon:"💪",label:"First PR"},{icon:"⭐",label:"Perfect wk"}].map(a=>(
+            <div key={a.label} className="flex-1 flex flex-col items-center gap-1 bg-orange-50 border border-orange-100 rounded-xl py-2">
+              <span className="text-base">{a.icon}</span>
+              <span className="text-[8px] text-gray-600 font-bold text-center">{a.label}</span>
             </div>
           ))}
         </div>
@@ -1161,31 +1294,34 @@ export const FitCoachS3: React.FC = () => (
 );
 
 // ─── SKILLPATH ─────────────────────────────────────────────
+
 export const SkillPathS1: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-50">
-    <AppBar title="SkillPath" />
-    <div className="px-4 py-3 bg-white border-b border-gray-100">
-      <div className="bg-gray-100 rounded-xl flex items-center gap-2 px-3 py-2">
-        <Search size={12} className="text-gray-400" /><span className="text-xs text-gray-400">Subject or skill...</span>
+  <div className="h-full flex flex-col bg-[#F0F3FF]">
+    <div className="bg-gradient-to-r from-indigo-700 to-violet-600 px-4 pt-4 pb-5">
+      <div className="text-white font-bold text-base mb-0.5">SkillPath</div>
+      <div className="text-indigo-200 text-[10px]">Learn from real experts</div>
+      <div className="mt-2 bg-white/20 border border-white/30 rounded-xl flex items-center gap-2 px-3 py-2">
+        <Search size={11} className="text-white/60"/>
+        <span className="text-[10px] text-white/60">Subject or skill…</span>
       </div>
     </div>
-    <div className="flex gap-2 px-4 py-2 overflow-hidden border-b border-gray-100 bg-white">
-      {["Math", "Physics", "English", "Coding", "History"].map((s, i) => <Pill key={s} label={s} active={i === 3} />)}
+    <div className="flex gap-2 px-4 py-2 bg-white border-b border-gray-100 overflow-hidden">
+      {["Math","Physics","English","Coding","History"].map((s,i)=><Chip key={s} label={s} active={i===3} color="bg-indigo-600 text-white"/>)}
     </div>
     <div className="flex-1 px-4 pt-3 space-y-2 overflow-hidden">
       {[
-        { name: "Carlos M.", subject: "Python & Web Dev", rating: "4.9", sessions: "312 lessons", price: "$45/hr", color: "bg-violet-100 text-violet-700" },
-        { name: "Sofía R.", subject: "Data Science", rating: "4.8", sessions: "187 lessons", price: "$55/hr", color: "bg-indigo-100 text-indigo-700" },
-        { name: "Tomás B.", subject: "Full Stack Dev", rating: "4.7", sessions: "98 lessons", price: "$50/hr", color: "bg-cyan-100 text-cyan-700" },
-      ].map((t) => (
-        <div key={t.name} className="bg-white rounded-xl p-3 flex items-center gap-3 border border-gray-100 shadow-sm">
-          <Avatar name={t.name} color={t.color} />
+        {name:"Carlos M.",subject:"Python & Web Dev",r:"4.9",sessions:"312",price:"$45/hr",bg:"bg-indigo-500"},
+        {name:"Sofía R.",subject:"Data Science",r:"4.8",sessions:"187",price:"$55/hr",bg:"bg-violet-500"},
+        {name:"Tomás B.",subject:"Full Stack Dev",r:"4.7",sessions:"98",price:"$50/hr",bg:"bg-purple-500"},
+      ].map(t=>(
+        <div key={t.name} className="bg-white rounded-2xl p-3 flex items-center gap-3 border border-gray-100 shadow-sm">
+          <AvatarCircle initials={t.name[0]} bg={t.bg}/>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-semibold text-gray-900">{t.name}</div>
-            <div className="text-xs text-gray-400">{t.subject}</div>
-            <div className="flex items-center gap-1"><span className="text-xs text-yellow-400">★</span><span className="text-xs text-gray-500">{t.rating}</span><span className="text-xs text-gray-300">·</span><span className="text-xs text-gray-400">{t.sessions}</span></div>
+            <div className="text-[10px] font-bold text-gray-900">{t.name}</div>
+            <div className="text-[9px] text-gray-400">{t.subject}</div>
+            <div className="flex items-center gap-1 mt-0.5"><Stars/><span className="text-[10px] text-gray-500 font-medium">{t.r}</span><span className="text-[10px] text-gray-300">·</span><span className="text-[9px] text-gray-400">{t.sessions} lessons</span></div>
           </div>
-          <div className="text-xs font-bold text-violet-600 shrink-0">{t.price}</div>
+          <div className="text-xs font-black text-indigo-600 shrink-0">{t.price}</div>
         </div>
       ))}
     </div>
@@ -1194,114 +1330,109 @@ export const SkillPathS1: React.FC = () => (
 
 export const SkillPathS2: React.FC = () => (
   <div className="h-full flex flex-col bg-white">
-    <AppBar title="Book a Lesson" />
-    <div className="flex items-center gap-3 px-4 pt-3 pb-3 border-b border-gray-100">
-      <div className="w-10 h-10 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center font-bold">C</div>
-      <div>
-        <div className="text-xs font-bold text-gray-900">Carlos M.</div>
-        <div className="text-xs text-gray-400">Python & Web Dev · $45/hr</div>
+    <div className="bg-gradient-to-br from-indigo-700 to-violet-600 px-4 pt-4 pb-8">
+      <div className="flex items-center gap-2 mb-3">
+        <ArrowLeft size={14} className="text-white/70"/>
+        <span className="text-white/70 text-xs">Back</span>
       </div>
-    </div>
-    <div className="flex-1 px-4 pt-3 space-y-4 overflow-hidden">
-      <div>
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Available this week</div>
-        <div className="grid grid-cols-4 gap-1.5">
-          {[
-            { day: "Mon", date: "Jun 2", slots: 2 },
-            { day: "Wed", date: "Jun 4", slots: 3, active: true },
-            { day: "Thu", date: "Jun 5", slots: 1 },
-            { day: "Fri", date: "Jun 6", slots: 4 },
-          ].map((d) => (
-            <div key={d.day} className={`flex flex-col items-center py-2 rounded-xl border text-xs ${d.active ? "border-violet-600 bg-violet-50" : "border-gray-200"}`}>
-              <span className={`font-semibold ${d.active ? "text-violet-700" : "text-gray-700"}`}>{d.day}</span>
-              <span className="text-gray-400 text-[10px]">{d.date}</span>
-              <span className={`text-[10px] font-medium mt-0.5 ${d.active ? "text-violet-600" : "text-gray-400"}`}>{d.slots} slots</span>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div>
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Time slots (Wed)</div>
-        <div className="flex gap-2 flex-wrap">
-          {["9:00 AM", "2:00 PM", "5:00 PM"].map((t, i) => (
-            <span key={t} className={`px-3 py-2 rounded-xl text-xs font-medium border ${i === 1 ? "bg-violet-600 text-white border-violet-600" : "bg-white text-gray-700 border-gray-200"}`}>{t}</span>
-          ))}
-        </div>
-      </div>
-      <div>
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Duration</div>
-        <div className="flex gap-2">
-          {["1 hour · $45", "2 hours · $85"].map((d, i) => (
-            <span key={d} className={`flex-1 py-2 rounded-xl text-xs font-medium border text-center ${i === 0 ? "bg-violet-600 text-white border-violet-600" : "border-gray-200 text-gray-600"}`}>{d}</span>
-          ))}
+      <div className="flex items-center gap-3">
+        <div className="w-14 h-14 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center text-2xl font-bold text-white">C</div>
+        <div>
+          <div className="text-white font-bold text-sm">Carlos M.</div>
+          <div className="text-indigo-200 text-[10px]">Python & Web Dev</div>
+          <div className="flex items-center gap-1 mt-0.5"><Stars/><span className="text-white text-[10px]">4.9</span><span className="text-white/60 text-[10px]">(312 lessons)</span></div>
         </div>
       </div>
     </div>
-    <div className="px-4 pb-4">
-      <button className="w-full py-3 rounded-xl bg-violet-600 text-white text-xs font-semibold">Confirm & Pay · $45</button>
+    <div className="px-4 -mt-4 mb-3">
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-3 flex gap-3">
+        {[{l:"Experience",v:"6 yrs",c:"text-indigo-600"},{l:"Lessons",v:"312",c:"text-gray-700"},{l:"Rate",v:"$45/hr",c:"text-violet-600"}].map(s=>(
+          <div key={s.l} className="flex-1 text-center">
+            <div className={`text-sm font-black ${s.c}`}>{s.v}</div>
+            <div className="text-[9px] text-gray-400">{s.l}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div className="flex-1 px-4 overflow-hidden">
+      <div className="text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-2">Pick a time</div>
+      <div className="flex gap-2 flex-wrap mb-3">
+        {["Mon 9am","Mon 2pm","Tue 10am","Wed 4pm"].map((t,i)=>(
+          <span key={t} className={`px-2.5 py-1.5 rounded-xl text-[9px] font-bold border ${i===1?"bg-indigo-600 text-white border-indigo-600":"bg-gray-50 text-gray-600 border-gray-200"}`}>{t}</span>
+        ))}
+      </div>
+      <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-3 flex items-center justify-between">
+        <div>
+          <div className="text-[10px] font-bold text-indigo-800">1 hour session</div>
+          <div className="text-[9px] text-indigo-500">Mon, Jun 9 · 2:00 PM</div>
+        </div>
+        <div className="text-sm font-black text-indigo-700">$45</div>
+      </div>
+    </div>
+    <div className="px-4 pb-4 pt-2">
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-indigo-700 to-violet-600 text-white text-xs font-bold shadow-md shadow-indigo-200">Book Lesson · $45 →</button>
     </div>
   </div>
 );
 
 export const SkillPathS3: React.FC = () => (
-  <div className="h-full flex flex-col bg-gray-900">
-    <div className="flex justify-between items-center px-4 py-2 bg-gray-900">
-      <div className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center text-xs font-bold">C</div>
+  <div className="h-full flex flex-col bg-white">
+    <div className="bg-gradient-to-r from-indigo-700 to-violet-600 px-4 pt-4 pb-6">
+      <div className="flex items-center gap-2 mb-2">
+        <Video size={16} className="text-white/70" />
+        <span className="text-white font-bold text-sm">Live Session</span>
+      </div>
+      <div className="bg-white/20 rounded-2xl p-3 flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-indigo-800 flex items-center justify-center text-lg font-bold text-white">C</div>
         <div>
-          <div className="text-xs font-semibold text-white">Carlos M.</div>
-          <div className="text-[10px] text-gray-400">Python & Web Dev</div>
+          <div className="text-white font-bold text-xs">Carlos M.</div>
+          <div className="text-indigo-200 text-[9px]">Python Basics · Week 1</div>
+        </div>
+        <div className="ml-auto flex items-center gap-1">
+          <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse"/>
+          <span className="text-white/70 text-[9px]">LIVE</span>
         </div>
       </div>
-      <div className="flex items-center gap-1">
-        <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-        <span className="text-xs text-gray-400">42:18</span>
-      </div>
     </div>
-    <div className="flex-1 bg-gray-800 flex items-center justify-center relative">
-      <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-2 opacity-60">
-          <div className="w-14 h-14 rounded-full bg-violet-400 flex items-center justify-center text-xl font-bold text-white">C</div>
-          <span className="text-xs text-gray-300">Carlos M.</span>
+    <div className="flex-1 px-4 pt-3 overflow-hidden">
+      <div className="bg-gray-900 rounded-2xl p-4 mb-3 font-mono">
+        <div className="text-[9px] text-gray-500 mb-2">lesson.py</div>
+        <div className="text-[10px] space-y-0.5">
+          <div><span className="text-purple-400">def </span><span className="text-blue-300">greet</span><span className="text-white">(name):</span></div>
+          <div className="pl-4"><span className="text-green-400">print</span><span className="text-white">(f</span><span className="text-yellow-300">"Hello, {"{name}"}!"</span><span className="text-white">)</span></div>
+          <div><span className="text-purple-400">greet</span><span className="text-white">(</span><span className="text-yellow-300">"World"</span><span className="text-white">)</span></div>
+        </div>
+        <div className="mt-2 pt-2 border-t border-gray-700">
+          <div className="text-[9px] text-green-400">▶ Hello, World!</div>
         </div>
       </div>
-      <div className="absolute bottom-3 right-3 w-16 h-20 bg-gray-600 rounded-lg border-2 border-gray-500 flex items-center justify-center">
-        <span className="text-xs text-gray-300 font-medium">You</span>
+      <div className="flex gap-2 mb-3">
+        {[{l:"Elapsed",v:"23:14",c:"text-gray-700"},{l:"Remaining",v:"36:46",c:"text-indigo-600"},{l:"Session",v:"$45",c:"text-violet-600"}].map(s=>(
+          <div key={s.l} className="flex-1 bg-gray-50 rounded-xl p-2 text-center border border-gray-100">
+            <div className={`text-xs font-black ${s.c}`}>{s.v}</div>
+            <div className="text-[8px] text-gray-400">{s.l}</div>
+          </div>
+        ))}
       </div>
-    </div>
-    <div className="flex items-center justify-around px-4 py-4 bg-gray-900">
-      <button className="flex flex-col items-center gap-1">
-        <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center"><Video size={16} className="text-white" /></div>
-        <span className="text-[9px] text-gray-400">Camera</span>
-      </button>
-      <button className="flex flex-col items-center gap-1">
-        <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center"><MessageSquare size={16} className="text-white" /></div>
-        <span className="text-[9px] text-gray-400">Chat</span>
-      </button>
-      <button className="flex flex-col items-center gap-1">
-        <div className="w-12 h-12 rounded-full bg-red-500 flex items-center justify-center"><Phone size={18} className="text-white" /></div>
-        <span className="text-[9px] text-gray-400">End</span>
-      </button>
-      <button className="flex flex-col items-center gap-1">
-        <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center"><BookOpen size={16} className="text-white" /></div>
-        <span className="text-[9px] text-gray-400">Notes</span>
-      </button>
+      <div className="bg-indigo-50 border border-indigo-100 rounded-xl px-3 py-2.5 flex items-center gap-2">
+        <BookOpen size={14} className="text-indigo-500 shrink-0"/>
+        <span className="text-[10px] text-indigo-700 font-medium">Next: Variables & data types →</span>
+      </div>
     </div>
   </div>
 );
 
-// ─── EXPORT MAP ────────────────────────────────────────────
 export const mockups: Record<string, [React.FC, React.FC, React.FC]> = {
-  stylego: [StyleGoS1, StyleGoS2, StyleGoS3],
-  fixit: [FixItS1, FixItS2, FixItS3],
-  petcare: [PetCareS1, PetCareS2, PetCareS3],
-  moveit: [MoveItS1, MoveItS2, MoveItS3],
+  stylego:    [StyleGoS1,    StyleGoS2,    StyleGoS3],
+  fixit:      [FixItS1,      FixItS2,      FixItS3],
+  petcare:    [PetCareS1,    PetCareS2,    PetCareS3],
+  moveit:     [MoveItS1,     MoveItS2,     MoveItS3],
   tableorder: [TableOrderS1, TableOrderS2, TableOrderS3],
-  freshbox: [FreshBoxS1, FreshBoxS2, FreshBoxS3],
-  paytrack: [PayTrackS1, PayTrackS2, PayTrackS3],
-  spliteasy: [SplitEasyS1, SplitEasyS2, SplitEasyS3],
-  storedesk: [StoreDeskS1, StoreDeskS2, StoreDeskS3],
-  mindspace: [MindSpaceS1, MindSpaceS2, MindSpaceS3],
-  fitcoach: [FitCoachS1, FitCoachS2, FitCoachS3],
-  skillpath: [SkillPathS1, SkillPathS2, SkillPathS3],
+  freshbox:   [FreshBoxS1,   FreshBoxS2,   FreshBoxS3],
+  paytrack:   [PayTrackS1,   PayTrackS2,   PayTrackS3],
+  spliteasy:  [SplitEasyS1,  SplitEasyS2,  SplitEasyS3],
+  storedesk:  [StoreDeskS1,  StoreDeskS2,  StoreDeskS3],
+  mindspace:  [MindSpaceS1,  MindSpaceS2,  MindSpaceS3],
+  fitcoach:   [FitCoachS1,   FitCoachS2,   FitCoachS3],
+  skillpath:  [SkillPathS1,  SkillPathS2,  SkillPathS3],
 };
