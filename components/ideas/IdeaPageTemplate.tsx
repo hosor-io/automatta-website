@@ -31,7 +31,7 @@ export default function IdeaPageTemplate({ idea }: { idea: Idea }) {
   const cards = featureCards[idea.slug] ?? [];
   const [Screen1, Screen2, Screen3] = mockups[idea.slug];
 
-  const ctaHeadline = t("ctaHeadline").replace("{name}", idea.name);
+  const ctaHeadline = t("ctaHeadline", { name: idea.name });
   const ctaSubheadline = t("ctaSubheadline");
 
   const scrollToContact = () => {
