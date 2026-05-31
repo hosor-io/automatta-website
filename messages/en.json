@@ -1,0 +1,136 @@
+{
+  "nav": {
+    "services": "Services",
+    "ideaLab": "Idea Lab",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "cta": "Start your project"
+  },
+  "hero": {
+    "headline": "We turn ideas into software that sells.",
+    "subheadline": "From idea to working product in weeks — not months. Fixed prices, no surprises.",
+    "ctaPrimary": "Start your project",
+    "ctaSecondary": "Explore the Idea Lab"
+  },
+  "social": {
+    "text": "10+ years delivering software products across Latin America, the US and Europe.",
+    "badge1": "Latin America, US & Europe",
+    "badge2": "6-week average delivery",
+    "badge3": "Fixed prices, no surprises"
+  },
+  "services": {
+    "title": "What we build",
+    "card1": {
+      "title": "MVP Development",
+      "body": "Turn your idea into a working product fast. We help entrepreneurs and businesses validate their concept with real software — before investing in a full build."
+    },
+    "card2": {
+      "title": "Custom Web & Mobile Apps",
+      "body": "Need something built from scratch? We design and develop web and mobile applications tailored to your business — on time, on budget."
+    },
+    "card3": {
+      "title": "AI-powered Automations",
+      "body": "We integrate AI into your workflows to eliminate repetitive tasks, reduce costs, and move faster. From WhatsApp bots to intelligent data processing."
+    }
+  },
+  "howItWorks": {
+    "title": "How it works",
+    "step1": {
+      "title": "Discovery",
+      "body": "We listen to your idea, understand your goals, and define the scope together. No technical jargon."
+    },
+    "step2": {
+      "title": "Fixed Proposal",
+      "body": "You receive a clear proposal with scope, timeline and fixed price. No surprises."
+    },
+    "step3": {
+      "title": "Build",
+      "body": "We design and develop your product in sprints, keeping you updated every step of the way."
+    },
+    "step4": {
+      "title": "Launch",
+      "body": "We deliver a production-ready product and stay with you after launch."
+    }
+  },
+  "ideaLab": {
+    "title": "Idea Lab",
+    "subtitle": "Not sure what to build? Browse our curated library of proven app ideas — with features, timelines and prices.",
+    "filterAll": "All",
+    "viewDetails": "View details",
+    "problemTitle": "The problem it solves",
+    "featuresTitle": "Key features",
+    "buildThis": "Build this idea",
+    "investment": "Investment",
+    "delivery": "Delivery",
+    "weeks": "wks"
+  },
+  "pricing": {
+    "title": "Simple, transparent pricing",
+    "subtitle": "No hourly rates. No surprises. You know exactly what you're paying before we start.",
+    "mostPopular": "Most Popular",
+    "includes": "Includes",
+    "getStarted": "Get started",
+    "contactUs": "Contact us",
+    "card1": {
+      "title": "Prototype",
+      "price": "From $500",
+      "description": "Validate your idea before committing to a full build.",
+      "f1": "Clickable prototype",
+      "f2": "Up to 10 screens",
+      "f3": "1 revision round",
+      "f4": "Delivered in 2 weeks"
+    },
+    "card2": {
+      "title": "MVP",
+      "price": "From $5,000",
+      "description": "A fully functional product to launch and start getting real users.",
+      "f1": "Full web or mobile app",
+      "f2": "Core features",
+      "f3": "6-week delivery",
+      "f4": "30 days post-launch support"
+    },
+    "card3": {
+      "title": "Full Product",
+      "price": "Custom",
+      "description": "For businesses ready to build beyond the MVP.",
+      "f1": "Custom scope",
+      "f2": "Dedicated team",
+      "f3": "Ongoing support",
+      "f4": "Priority delivery"
+    }
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "q1": "How does the process work?",
+    "a1": "We start with a discovery call to understand your idea and goals. Then we send you a fixed proposal with scope, timeline and price. Once approved, we build in sprints and keep you updated every step of the way.",
+    "q2": "How long does it take to build an MVP?",
+    "a2": "Most MVPs are delivered in 4 to 8 weeks depending on complexity. We'll give you an exact timeline in your proposal before we start.",
+    "q3": "Are prices really fixed?",
+    "a3": "Yes. We agree on scope and price upfront. If you request changes outside the original scope, we'll quote them separately — no surprises mid-project.",
+    "q4": "What happens after launch?",
+    "a4": "Every MVP includes 30 days of post-launch support. After that, we offer ongoing maintenance and support plans so you're never left on your own.",
+    "q5": "Do I own the code?",
+    "a5": "100%. Once the project is delivered and paid, all code and intellectual property belong to you.",
+    "q6": "Can you work with clients outside Latin America?",
+    "a6": "Absolutely. We work with entrepreneurs and businesses in Latin America, the US and Europe. We're fully remote and async-friendly."
+  },
+  "cta": {
+    "headline": "Ready to build your idea?",
+    "subheadline": "Tell us what you're building. We'll take it from there.",
+    "name": "Name",
+    "email": "Email",
+    "building": "What are you building?",
+    "budget": "Budget range",
+    "budgetOpt1": "Under $5k",
+    "budgetOpt2": "$5k–$10k",
+    "budgetOpt3": "$10k–$20k",
+    "budgetOpt4": "$20k+",
+    "submit": "Start your project",
+    "disclaimer": "Free discovery call. No commitment.",
+    "success": "Message sent! We'll be in touch soon.",
+    "error": "Something went wrong. Please try again."
+  },
+  "footer": {
+    "rights": "© 2025 Automatta.ai. All rights reserved."
+  }
+}

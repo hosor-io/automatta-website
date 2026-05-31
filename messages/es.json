@@ -1,0 +1,136 @@
+{
+  "nav": {
+    "services": "Servicios",
+    "ideaLab": "Idea Lab",
+    "pricing": "Precios",
+    "faq": "FAQ",
+    "cta": "Inicia tu proyecto"
+  },
+  "hero": {
+    "headline": "Convertimos ideas en software que vende.",
+    "subheadline": "De la idea al producto funcional en semanas, no meses. Precios fijos, sin sorpresas.",
+    "ctaPrimary": "Inicia tu proyecto",
+    "ctaSecondary": "Explorar el Idea Lab"
+  },
+  "social": {
+    "text": "Más de 10 años entregando productos de software en Latinoamérica, EEUU y Europa.",
+    "badge1": "Latinoamérica, EEUU y Europa",
+    "badge2": "Entrega promedio en 6 semanas",
+    "badge3": "Precios fijos, sin sorpresas"
+  },
+  "services": {
+    "title": "Qué construimos",
+    "card1": {
+      "title": "Desarrollo de MVP",
+      "body": "Convierte tu idea en un producto funcional rápido. Ayudamos a emprendedores y empresas a validar su concepto con software real — antes de invertir en un desarrollo completo."
+    },
+    "card2": {
+      "title": "Web y Mobile Apps a la medida",
+      "body": "¿Necesitas algo construido desde cero? Diseñamos y desarrollamos aplicaciones web y móviles adaptadas a tu negocio — a tiempo y dentro del presupuesto."
+    },
+    "card3": {
+      "title": "Automatizaciones con IA",
+      "body": "Integramos IA en tus procesos para eliminar tareas repetitivas, reducir costos y avanzar más rápido. Desde bots de WhatsApp hasta procesamiento inteligente de datos."
+    }
+  },
+  "howItWorks": {
+    "title": "Cómo trabajamos",
+    "step1": {
+      "title": "Discovery",
+      "body": "Escuchamos tu idea, entendemos tus objetivos y definimos el alcance juntos. Sin tecnicismos."
+    },
+    "step2": {
+      "title": "Propuesta Fija",
+      "body": "Recibes una propuesta clara con alcance, tiempo y precio fijo. Sin sorpresas."
+    },
+    "step3": {
+      "title": "Desarrollo",
+      "body": "Diseñamos y desarrollamos tu producto en sprints, manteniéndote informado en cada paso."
+    },
+    "step4": {
+      "title": "Lanzamiento",
+      "body": "Entregamos un producto listo para producción y nos quedamos contigo después del lanzamiento."
+    }
+  },
+  "ideaLab": {
+    "title": "Idea Lab",
+    "subtitle": "¿No sabes qué construir? Explora nuestra biblioteca de ideas de apps probadas — con funcionalidades, tiempos y precios.",
+    "filterAll": "Todas",
+    "viewDetails": "Ver detalles",
+    "problemTitle": "El problema que resuelve",
+    "featuresTitle": "Funcionalidades clave",
+    "buildThis": "Construir esta idea",
+    "investment": "Inversión",
+    "delivery": "Entrega",
+    "weeks": "sem"
+  },
+  "pricing": {
+    "title": "Precios simples y transparentes",
+    "subtitle": "Sin tarifas por hora. Sin sorpresas. Sabes exactamente cuánto pagas antes de empezar.",
+    "mostPopular": "Más Popular",
+    "includes": "Incluye",
+    "getStarted": "Comenzar",
+    "contactUs": "Contáctanos",
+    "card1": {
+      "title": "Prototipo",
+      "price": "Desde $500",
+      "description": "Valida tu idea antes de comprometerte con un desarrollo completo.",
+      "f1": "Prototipo clickeable",
+      "f2": "Hasta 10 pantallas",
+      "f3": "1 ronda de revisión",
+      "f4": "Entrega en 2 semanas"
+    },
+    "card2": {
+      "title": "MVP",
+      "price": "Desde $5,000",
+      "description": "Un producto completamente funcional para lanzar y conseguir usuarios reales.",
+      "f1": "App web o móvil completa",
+      "f2": "Funcionalidades core",
+      "f3": "Entrega en 6 semanas",
+      "f4": "30 días de soporte post-lanzamiento"
+    },
+    "card3": {
+      "title": "Producto Completo",
+      "price": "A la medida",
+      "description": "Para negocios listos para construir más allá del MVP.",
+      "f1": "Alcance personalizado",
+      "f2": "Equipo dedicado",
+      "f3": "Soporte continuo",
+      "f4": "Entrega prioritaria"
+    }
+  },
+  "faq": {
+    "title": "Preguntas frecuentes",
+    "q1": "¿Cómo funciona el proceso?",
+    "a1": "Empezamos con una llamada de discovery para entender tu idea y objetivos. Luego te enviamos una propuesta fija con alcance, tiempo y precio. Una vez aprobada, construimos en sprints y te mantenemos informado en cada paso.",
+    "q2": "¿Cuánto tiempo toma construir un MVP?",
+    "a2": "La mayoría de los MVPs se entregan en 4 a 8 semanas dependiendo de la complejidad. Te daremos un tiempo exacto en tu propuesta antes de empezar.",
+    "q3": "¿Los precios son realmente fijos?",
+    "a3": "Sí. Acordamos el alcance y el precio por adelantado. Si solicitas cambios fuera del alcance original, los cotizamos por separado — sin sorpresas a mitad del proyecto.",
+    "q4": "¿Qué pasa después del lanzamiento?",
+    "a4": "Todo MVP incluye 30 días de soporte post-lanzamiento. Después, ofrecemos planes de mantenimiento y soporte para que nunca estés solo.",
+    "q5": "¿Soy dueño del código?",
+    "a5": "100%. Una vez entregado y pagado el proyecto, todo el código y la propiedad intelectual son tuyos.",
+    "q6": "¿Pueden trabajar con clientes fuera de Latinoamérica?",
+    "a6": "Absolutamente. Trabajamos con emprendedores y empresas en Latinoamérica, EEUU y Europa. Somos 100% remotos."
+  },
+  "cta": {
+    "headline": "¿Listo para construir tu idea?",
+    "subheadline": "Cuéntanos qué estás construyendo. Nosotros nos encargamos del resto.",
+    "name": "Nombre",
+    "email": "Email",
+    "building": "¿Qué estás construyendo?",
+    "budget": "Rango de presupuesto",
+    "budgetOpt1": "Menos de $5k",
+    "budgetOpt2": "$5k–$10k",
+    "budgetOpt3": "$10k–$20k",
+    "budgetOpt4": "$20k+",
+    "submit": "Iniciar proyecto",
+    "disclaimer": "Llamada de discovery gratuita. Sin compromiso.",
+    "success": "¡Mensaje enviado! Te contactaremos pronto.",
+    "error": "Algo salió mal. Por favor intenta de nuevo."
+  },
+  "footer": {
+    "rights": "© 2025 Automatta.ai. Todos los derechos reservados."
+  }
+}
