@@ -115,6 +115,9 @@ export default function CTAFinal({
               {state.submitting ? "..." : t("submit")}
             </button>
 
+            {/* Honeypot — hidden from humans, catches bots */}
+            <input type="text" name="_gotcha" style={{ display: "none" }} tabIndex={-1} autoComplete="off" />
+
             <p className="text-center text-xs text-[#71717A]">{t("disclaimer")}</p>
           </motion.form>
         )}
