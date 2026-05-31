@@ -12,7 +12,7 @@ type FormData = {
   budget: string;
 };
 
-export default function CTAFinal() {
+export default function CTAFinal({ prefillBuilding, headline, subheadline }: { prefillBuilding?: string; headline?: string; subheadline?: string }) {
   const t = useTranslations("cta");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -21,7 +21,7 @@ export default function CTAFinal() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FormData>();
+  } = useForm<FormData>({ defaultValues: { building: prefillBuilding ?? "" } });
 
   const onSubmit = async (data: FormData) => {
     setStatus("loading");
@@ -65,8 +65,8 @@ export default function CTAFinal() {
           <span className="text-xs font-medium uppercase tracking-widest text-[#7C3AED] mb-3 block">
             Get started
           </span>
-          <h2 className="text-4xl font-semibold text-[#09090B] mb-4">{t("headline")}</h2>
-          <p className="text-[#52525B] text-sm">{t("subheadline")}</p>
+          <h2 className="text-4xl font-semibold text-[#09090B] mb-4">{headline ?? t("headline")}</h2>
+          <p className="text-[#52525B] text-sm">{subheadline ?? t("subheadline")}</p>
         </motion.div>
 
         <motion.form

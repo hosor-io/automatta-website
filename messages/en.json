@@ -132,5 +132,17 @@
   },
   "footer": {
     "rights": "© 2025 Automatta.ai. All rights reserved."
+  },
+  "ideaPage": {
+    "back": "← Back to Idea Lab",
+    "problemTitle": "The problem it solves",
+    "mockupsTitle": "What it looks like",
+    "featuresTitle": "Key features",
+    "buildThis": "Build this idea",
+    "investment": "Investment",
+    "delivery": "Delivery time",
+    "weeks": "wks",
+    "ctaHeadline": "Ready to build {name}?",
+    "ctaSubheadline": "Tell us what you're building. We'll take it from there."
   }
 }
