@@ -5,7 +5,7 @@ import IdeaPageTemplate from "@/components/ideas/IdeaPageTemplate";
 export function generateStaticParams() {
   const locales = ["en", "es"];
   return locales.flatMap((locale) =>
-    IDEAS.map((idea) => ({ locale, slug: idea.slug }))
+    IDEAS.map((idea) => ({ locale, slug: (idea as any).slug as string }))
   );
 }
 
