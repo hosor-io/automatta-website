@@ -85,7 +85,7 @@ function IdeaModal({
               {t("featuresTitle")}
             </h4>
             <ul className="space-y-2">
-              {idea.features.map((f, i) => (
+              {(locale === "es" ? idea.featuresEs : idea.featuresEn).map((f, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-[#52525B]">
                   <Check size={14} className="text-[#10B981] mt-0.5 shrink-0" />
                   {f}

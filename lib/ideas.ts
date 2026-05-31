@@ -8,7 +8,8 @@ export type Idea = {
   weeks: string;
   problemEn: string;
   problemEs: string;
-  features: string[];
+  featuresEn: string[];
+  featuresEs: string[];
 };
 
 export const IDEAS: Idea[] = [
@@ -20,17 +21,23 @@ export const IDEAS: Idea[] = [
     taglineEs: "Tu estilista, a domicilio.",
     price: "$8,000–$12,000",
     weeks: "6–8",
-    problemEn:
-      "Booking a beauty service shouldn't mean commuting to a salon. StyleGo connects clients with certified stylists and barbers who come to them.",
-    problemEs:
-      "Reservar un servicio de belleza no debería significar desplazarse a un salón. StyleGo conecta clientes con estilistas y barberos certificados que van donde estén.",
-    features: [
+    problemEn: "Booking a beauty service shouldn't mean commuting to a salon. StyleGo connects clients with certified stylists and barbers who come to them.",
+    problemEs: "Reservar un servicio de belleza no debería significar desplazarse a un salón. StyleGo conecta clientes con estilistas y barberos certificados que van donde estén.",
+    featuresEn: [
       "Stylist profiles with photos, reviews and specialties",
       "Real-time availability booking",
       "In-app payments",
       "Geolocation to find nearby stylists",
       "Chat between client and stylist",
       "Stylist management dashboard",
+    ],
+    featuresEs: [
+      "Perfiles de estilistas con fotos, reseñas y especialidades",
+      "Reservas con disponibilidad en tiempo real",
+      "Pagos dentro de la app",
+      "Geolocalización para encontrar estilistas cercanos",
+      "Chat entre cliente y estilista",
+      "Panel de gestión para estilistas",
     ],
   },
   {
@@ -41,17 +48,23 @@ export const IDEAS: Idea[] = [
     taglineEs: "Reparaciones a domicilio, al instante.",
     price: "$9,000–$14,000",
     weeks: "7–9",
-    problemEn:
-      "Finding a reliable plumber or electrician shouldn't take days. FixIt connects homeowners with verified technicians available today.",
-    problemEs:
-      "Encontrar un plomero o electricista confiable no debería tomar días. FixIt conecta propietarios con técnicos verificados disponibles hoy.",
-    features: [
+    problemEn: "Finding a reliable plumber or electrician shouldn't take days. FixIt connects homeowners with verified technicians available today.",
+    problemEs: "Encontrar un plomero o electricista confiable no debería tomar días. FixIt conecta propietarios con técnicos verificados disponibles hoy.",
+    featuresEn: [
       "Service category selection",
       "Technician profiles with ratings and certifications",
       "Real-time tracking",
       "In-app quotes and payments",
       "Job history and receipts",
       "Admin panel for technician management",
+    ],
+    featuresEs: [
+      "Selección de categoría de servicio",
+      "Perfiles de técnicos con calificaciones y certificaciones",
+      "Seguimiento en tiempo real",
+      "Cotizaciones y pagos dentro de la app",
+      "Historial de trabajos y recibos",
+      "Panel de administración para gestión de técnicos",
     ],
   },
   {
@@ -62,17 +75,23 @@ export const IDEAS: Idea[] = [
     taglineEs: "Vet y groomer, a domicilio.",
     price: "$8,000–$11,000",
     weeks: "6–8",
-    problemEn:
-      "Taking pets to the vet or groomer is stressful. PetCare brings certified professionals to your home.",
-    problemEs:
-      "Llevar mascotas al veterinario es estresante. PetCare lleva profesionales certificados a tu hogar.",
-    features: [
+    problemEn: "Taking pets to the vet or groomer is stressful. PetCare brings certified professionals to your home.",
+    problemEs: "Llevar mascotas al veterinario es estresante. PetCare lleva profesionales certificados a tu hogar.",
+    featuresEn: [
       "Vet and groomer profiles",
       "Appointment booking with pet profiles",
       "Medical history per pet",
       "Real-time GPS tracking",
       "In-app payments",
       "Review and rating system",
+    ],
+    featuresEs: [
+      "Perfiles de veterinarios y groomers",
+      "Reserva de citas con perfil de cada mascota",
+      "Historial médico por mascota",
+      "Seguimiento GPS en tiempo real",
+      "Pagos dentro de la app",
+      "Sistema de reseñas y calificaciones",
     ],
   },
   {
@@ -83,17 +102,23 @@ export const IDEAS: Idea[] = [
     taglineEs: "Mudanzas sin complicaciones.",
     price: "$10,000–$15,000",
     weeks: "8–10",
-    problemEn:
-      "Hiring a moving truck shouldn't require phone calls and days of negotiation. MoveIt connects you with available trucks and movers in minutes.",
-    problemEs:
-      "Contratar un camión de mudanza no debería requerir días de negociación. MoveIt te conecta con camiones y personal disponibles en minutos.",
-    features: [
+    problemEn: "Hiring a moving truck shouldn't require phone calls and days of negotiation. MoveIt connects you with available trucks and movers in minutes.",
+    problemEs: "Contratar un camión de mudanza no debería requerir días de negociación. MoveIt te conecta con camiones y personal disponibles en minutos.",
+    featuresEn: [
       "Load size estimator",
       "Driver and truck profiles with ratings",
       "Real-time price quote",
       "Live tracking during move",
       "In-app payment and tip",
       "Cargo insurance options",
+    ],
+    featuresEs: [
+      "Estimador de volumen de carga",
+      "Perfiles de choferes y camiones con calificaciones",
+      "Cotización de precio en tiempo real",
+      "Seguimiento en vivo durante la mudanza",
+      "Pago y propina dentro de la app",
+      "Opciones de seguro para la carga",
     ],
   },
   {
@@ -104,17 +129,23 @@ export const IDEAS: Idea[] = [
     taglineEs: "Tu restaurante, sin comisiones.",
     price: "$7,000–$10,000",
     weeks: "5–7",
-    problemEn:
-      "Third-party delivery apps charge 20–30% per order. TableOrder gives restaurants their own ordering system with zero commissions.",
-    problemEs:
-      "Las apps de delivery cobran 20–30% por pedido. TableOrder da a los restaurantes su propio sistema sin comisiones.",
-    features: [
+    problemEn: "Third-party delivery apps charge 20–30% per order. TableOrder gives restaurants their own ordering system with zero commissions.",
+    problemEs: "Las apps de delivery cobran 20–30% por pedido. TableOrder da a los restaurantes su propio sistema sin comisiones.",
+    featuresEn: [
       "Digital menu with categories and photos",
       "QR code table ordering",
       "Online ordering for pickup and delivery",
       "Real-time kitchen dashboard",
       "Sales reports",
       "Customer loyalty program",
+    ],
+    featuresEs: [
+      "Menú digital con categorías y fotos",
+      "Pedidos en mesa por código QR",
+      "Pedidos en línea para recoger y a domicilio",
+      "Panel de cocina en tiempo real",
+      "Reportes de ventas",
+      "Programa de lealtad para clientes",
     ],
   },
   {
@@ -125,17 +156,23 @@ export const IDEAS: Idea[] = [
     taglineEs: "Del campo a tu puerta, cada semana.",
     price: "$8,000–$11,000",
     weeks: "6–8",
-    problemEn:
-      "Getting quality fresh produce consistently is hard. FreshBox delivers curated weekly boxes directly from local farms.",
-    problemEs:
-      "Conseguir productos frescos de calidad es difícil. FreshBox entrega cajas semanales curadas directamente de granjas locales.",
-    features: [
+    problemEn: "Getting quality fresh produce consistently is hard. FreshBox delivers curated weekly boxes directly from local farms.",
+    problemEs: "Conseguir productos frescos de calidad es difícil. FreshBox entrega cajas semanales curadas directamente de granjas locales.",
+    featuresEn: [
       "Subscription plan selector",
       "Weekly customization of box contents",
       "Recurring billing with Stripe",
       "Delivery scheduling and tracking",
       "Producer profiles",
       "Pause or cancel anytime",
+    ],
+    featuresEs: [
+      "Selector de plan de suscripción",
+      "Personalización semanal del contenido de la caja",
+      "Cobro recurrente con Stripe",
+      "Programación y seguimiento de entregas",
+      "Perfiles de productores",
+      "Pausar o cancelar en cualquier momento",
     ],
   },
   {
@@ -146,17 +183,23 @@ export const IDEAS: Idea[] = [
     taglineEs: "Cobra más rápido.",
     price: "$7,000–$10,000",
     weeks: "5–7",
-    problemEn:
-      "Freelancers and small businesses lose hours managing invoices. PayTrack automates the entire billing cycle.",
-    problemEs:
-      "Los freelancers pierden horas gestionando facturas. PayTrack automatiza todo el ciclo de facturación.",
-    features: [
+    problemEn: "Freelancers and small businesses lose hours managing invoices. PayTrack automates the entire billing cycle.",
+    problemEs: "Los freelancers pierden horas gestionando facturas. PayTrack automatiza todo el ciclo de facturación.",
+    featuresEn: [
       "Client and project management",
       "Invoice creation and PDF export",
       "Automated payment reminders",
       "Stripe and PayPal integration",
       "Income and expense dashboard",
       "Tax report generation",
+    ],
+    featuresEs: [
+      "Gestión de clientes y proyectos",
+      "Creación de facturas y exportación a PDF",
+      "Recordatorios de pago automatizados",
+      "Integración con Stripe y PayPal",
+      "Dashboard de ingresos y gastos",
+      "Generación de reportes fiscales",
     ],
   },
   {
@@ -167,17 +210,23 @@ export const IDEAS: Idea[] = [
     taglineEs: "Sin conversaciones incómodas de dinero.",
     price: "$5,000–$8,000",
     weeks: "4–6",
-    problemEn:
-      "Splitting bills with friends or roommates creates friction. SplitEasy tracks shared expenses and settles balances automatically.",
-    problemEs:
-      "Dividir gastos con amigos genera fricción. SplitEasy rastrea gastos compartidos y liquida saldos automáticamente.",
-    features: [
+    problemEn: "Splitting bills with friends or roommates creates friction. SplitEasy tracks shared expenses and settles balances automatically.",
+    problemEs: "Dividir gastos con amigos genera fricción. SplitEasy rastrea gastos compartidos y liquida saldos automáticamente.",
+    featuresEn: [
       "Group and expense creation",
       "Multiple split methods",
       "Balance tracking per person",
       "Settlement suggestions",
       "Push notifications",
       "Export monthly summaries",
+    ],
+    featuresEs: [
+      "Creación de grupos y gastos",
+      "Múltiples métodos de división",
+      "Seguimiento de saldo por persona",
+      "Sugerencias de liquidación",
+      "Notificaciones push",
+      "Exportar resúmenes mensuales",
     ],
   },
   {
@@ -188,17 +237,23 @@ export const IDEAS: Idea[] = [
     taglineEs: "Tu tienda, totalmente gestionada.",
     price: "$9,000–$13,000",
     weeks: "7–9",
-    problemEn:
-      "Small retailers juggle spreadsheets and manual inventory. StoreDesk puts it all in one simple system.",
-    problemEs:
-      "Los pequeños negocios manejan hojas de cálculo e inventario manual. StoreDesk lo centraliza en un sistema simple.",
-    features: [
+    problemEn: "Small retailers juggle spreadsheets and manual inventory. StoreDesk puts it all in one simple system.",
+    problemEs: "Los pequeños negocios manejan hojas de cálculo e inventario manual. StoreDesk lo centraliza en un sistema simple.",
+    featuresEn: [
       "POS with barcode scanning",
       "Real-time inventory management",
       "Sales reports and low stock alerts",
       "Customer purchase history",
       "Multiple payment methods",
       "Multi-user access with roles",
+    ],
+    featuresEs: [
+      "Punto de venta con escaneo de código de barras",
+      "Gestión de inventario en tiempo real",
+      "Reportes de ventas y alertas de stock bajo",
+      "Historial de compras por cliente",
+      "Múltiples métodos de pago",
+      "Acceso multiusuario con roles",
     ],
   },
   {
@@ -209,17 +264,23 @@ export const IDEAS: Idea[] = [
     taglineEs: "Salud mental accesible para todos.",
     price: "$10,000–$15,000",
     weeks: "8–10",
-    problemEn:
-      "Finding a therapist is complicated and slow. MindSpace connects people with licensed therapists for online sessions.",
-    problemEs:
-      "Encontrar un terapeuta es complicado. MindSpace conecta personas con terapeutas licenciados para sesiones online.",
-    features: [
+    problemEn: "Finding a therapist is complicated and slow. MindSpace connects people with licensed therapists for online sessions.",
+    problemEs: "Encontrar un terapeuta es complicado. MindSpace conecta personas con terapeutas licenciados para sesiones online.",
+    featuresEn: [
       "Therapist profiles with specialties",
       "Video session booking",
       "Secure in-app messaging",
       "Session notes",
       "Subscription plans",
       "Anonymous mode for first-time users",
+    ],
+    featuresEs: [
+      "Perfiles de terapeutas con especialidades",
+      "Reserva de sesiones de video",
+      "Mensajería segura dentro de la app",
+      "Notas de sesión",
+      "Planes de suscripción",
+      "Modo anónimo para nuevos usuarios",
     ],
   },
   {
@@ -230,17 +291,23 @@ export const IDEAS: Idea[] = [
     taglineEs: "Tu entrenador, en tu bolsillo.",
     price: "$8,000–$12,000",
     weeks: "6–8",
-    problemEn:
-      "Personal training is expensive and hard to access. FitCoach connects users with certified coaches for online sessions.",
-    problemEs:
-      "El entrenamiento personal es caro. FitCoach conecta usuarios con coaches certificados para sesiones online.",
-    features: [
+    problemEn: "Personal training is expensive and hard to access. FitCoach connects users with certified coaches for online sessions.",
+    problemEs: "El entrenamiento personal es caro. FitCoach conecta usuarios con coaches certificados para sesiones online.",
+    featuresEn: [
       "Coach profiles with specialties and pricing",
       "Live session scheduling via video",
       "Custom workout plan builder",
       "Progress tracking",
       "In-app messaging",
       "Achievement badges and streaks",
+    ],
+    featuresEs: [
+      "Perfiles de coaches con especialidades y precios",
+      "Programación de sesiones en vivo por video",
+      "Constructor de planes de entrenamiento personalizados",
+      "Seguimiento de progreso",
+      "Mensajería dentro de la app",
+      "Insignias de logros y rachas",
     ],
   },
   {
@@ -251,11 +318,9 @@ export const IDEAS: Idea[] = [
     taglineEs: "Aprende de expertos reales.",
     price: "$9,000–$13,000",
     weeks: "7–9",
-    problemEn:
-      "Finding a qualified tutor is still done via WhatsApp groups. SkillPath is the marketplace that fixes that.",
-    problemEs:
-      "Encontrar un tutor calificado todavía se hace por WhatsApp. SkillPath es el marketplace que lo soluciona.",
-    features: [
+    problemEn: "Finding a qualified tutor is still done via WhatsApp groups. SkillPath is the marketplace that fixes that.",
+    problemEs: "Encontrar un tutor calificado todavía se hace por WhatsApp. SkillPath es el marketplace que lo soluciona.",
+    featuresEn: [
       "Tutor profiles with subjects and ratings",
       "Lesson booking and calendar sync",
       "Live video sessions",
@@ -263,15 +328,23 @@ export const IDEAS: Idea[] = [
       "Review and rating system",
       "Subscription plans",
     ],
+    featuresEs: [
+      "Perfiles de tutores con materias y calificaciones",
+      "Reserva de clases y sincronización de calendario",
+      "Sesiones de video en vivo",
+      "Seguimiento de progreso del estudiante",
+      "Sistema de reseñas y calificaciones",
+      "Planes de suscripción",
+    ],
   },
 ];
 
 export const CATEGORIES = ["On-demand", "Food & Delivery", "Fintech", "Health", "Education"];
 
 export const CATEGORY_COLORS: Record<string, string> = {
-  "On-demand": "bg-purple-500/20 text-purple-300 border-purple-500/30",
-  "Food & Delivery": "bg-orange-500/20 text-orange-300 border-orange-500/30",
-  Fintech: "bg-green-500/20 text-green-300 border-green-500/30",
-  Health: "bg-blue-500/20 text-blue-300 border-blue-500/30",
-  Education: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
+  "On-demand": "bg-purple-500/20 text-purple-700 border-purple-500/30",
+  "Food & Delivery": "bg-orange-500/20 text-orange-700 border-orange-500/30",
+  Fintech: "bg-green-500/20 text-green-700 border-green-500/30",
+  Health: "bg-blue-500/20 text-blue-700 border-blue-500/30",
+  Education: "bg-yellow-500/20 text-yellow-700 border-yellow-500/30",
 };
