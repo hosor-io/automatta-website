@@ -4,63 +4,114 @@ import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { ArrowRight, Star, Check, TrendingUp, MapPin, Search, ShoppingBag, Bell } from "lucide-react";
 
-// ─── Realistic phone frame ───────────────────────────────────
+// ─── Status bar icons ────────────────────────────────────────
+function SignalBars({ color = "#1a1a1a" }: { color?: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "flex-end", gap: 1.5 }}>
+      {[5, 7, 9, 11].map((h, i) => (
+        <div key={h} style={{ width: 3, height: h, borderRadius: 1.5, background: i < 3 ? color : `${color}55` }} />
+      ))}
+    </div>
+  );
+}
+
+function WifiIcon({ color = "#1a1a1a" }: { color?: string }) {
+  return (
+    <svg width="13" height="10" viewBox="0 0 13 10" fill="none">
+      <path d="M6.5 8.5a1.2 1.2 0 1 1 0 2.4A1.2 1.2 0 0 1 6.5 8.5z" fill={color} />
+      <path d="M3.3 6.1a4.5 4.5 0 0 1 6.4 0" stroke={color} strokeWidth="1.3" strokeLinecap="round" fill="none" />
+      <path d="M1 3.8a7.8 7.8 0 0 1 11 0" stroke={color} strokeWidth="1.3" strokeLinecap="round" fill="none" opacity="0.4" />
+    </svg>
+  );
+}
+
+function BatteryIcon({ color = "#1a1a1a" }: { color?: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 1 }}>
+      <div style={{ width: 22, height: 11, borderRadius: 3, border: `1.5px solid ${color}`, position: "relative" }}>
+        <div style={{ position: "absolute", inset: 2, right: 3, background: color, borderRadius: 1.5 }} />
+        <div style={{ position: "absolute", right: -4, top: "50%", transform: "translateY(-50%)", width: 3, height: 5, borderRadius: "0 2px 2px 0", background: color, opacity: 0.4 }} />
+      </div>
+    </div>
+  );
+}
+
+function StatusBar({ light = false }: { light?: boolean }) {
+  const color = light ? "#ffffff" : "#1a1a1a";
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 20px 4px", background: "transparent" }}>
+      <span style={{ fontSize: 11, fontWeight: 700, color, letterSpacing: -0.3 }}>9:41</span>
+      {/* Dynamic Island */}
+      <div style={{ width: 90, height: 26, background: "#000", borderRadius: 20, position: "absolute", left: "50%", transform: "translateX(-50%)", top: 0 }} />
+      <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+        <SignalBars color={color} />
+        <WifiIcon color={color} />
+        <BatteryIcon color={color} />
+      </div>
+    </div>
+  );
+}
+
+// ─── iPhone 14 Pro frame ─────────────────────────────────────
 function Phone({
   children,
-  className = "",
-  style = {},
+  statusLight = false,
 }: {
   children: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
+  statusLight?: boolean;
 }) {
   return (
-    <div
-      className={`relative shrink-0 ${className}`}
-      style={{
-        width: 200,
-        ...style,
-      }}
-    >
-      {/* Outer shell */}
-      <div
-        className="relative rounded-[36px] overflow-hidden"
-        style={{
-          background: "#111",
-          padding: "10px 8px",
-          boxShadow: "0 40px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08) inset",
-        }}
-      >
-        {/* Side buttons (decorative) */}
-        <div className="absolute right-[-3px] top-20 w-[3px] h-8 bg-[#333] rounded-l-sm" />
-        <div className="absolute left-[-3px] top-16 w-[3px] h-6 bg-[#333] rounded-r-sm" />
-        <div className="absolute left-[-3px] top-24 w-[3px] h-6 bg-[#333] rounded-r-sm" />
+    <div style={{ position: "relative", width: 210, flexShrink: 0 }}>
+      {/* Ground shadow */}
+      <div style={{
+        position: "absolute",
+        bottom: -20,
+        left: "10%",
+        width: "80%",
+        height: 30,
+        borderRadius: "50%",
+        background: "rgba(0,0,0,0.18)",
+        filter: "blur(16px)",
+        zIndex: 0,
+      }} />
 
-        {/* Screen */}
-        <div className="rounded-[28px] overflow-hidden bg-white" style={{ height: 400 }}>
-          {/* Status bar */}
-          <div className="flex items-center justify-between px-5 pt-2 pb-1 bg-white">
-            <span className="text-[10px] font-bold text-gray-800">9:41</span>
-            <div className="w-16 h-4 bg-black rounded-full" /> {/* Dynamic island */}
-            <div className="flex items-center gap-1 text-gray-800">
-              <div className="flex gap-[2px] items-end">
-                {[3,5,7,9].map(h=><div key={h} className="w-[3px] bg-current rounded-sm" style={{height:h}}/>)}
-              </div>
-              <svg width="11" height="9" viewBox="0 0 11 9" fill="none" className="text-gray-800">
-                <path d="M5.5 2C7.2 2 8.7 2.7 9.8 3.8L11 2.6C9.6 1.3 7.6.5 5.5.5S1.4 1.3 0 2.6L1.2 3.8C2.3 2.7 3.8 2 5.5 2z" fill="currentColor"/>
-                <path d="M5.5 5c1 0 1.9.4 2.6 1l1.2-1.2C8.2 3.7 6.9 3 5.5 3S2.8 3.7 1.7 4.8L2.9 6c.7-.6 1.6-1 2.6-1z" fill="currentColor"/>
-                <circle cx="5.5" cy="8" r="1.2" fill="currentColor"/>
-              </svg>
-              <div className="flex items-center">
-                <div className="w-5 h-2.5 rounded-sm border border-gray-500 relative">
-                  <div className="absolute inset-[2px] right-[3px] bg-gray-800 rounded-[1px]" />
-                  <div className="absolute -right-[3px] top-[3px] w-[2px] h-1 bg-gray-500 rounded-r-sm" />
-                </div>
-              </div>
-            </div>
+      {/* Body */}
+      <div style={{
+        position: "relative",
+        zIndex: 1,
+        borderRadius: 44,
+        background: "linear-gradient(160deg, #2a2a2a 0%, #111 60%)",
+        padding: "12px 9px",
+        boxShadow: [
+          "0 0 0 1px rgba(255,255,255,0.12)",          // rim highlight
+          "0 0 0 2px rgba(0,0,0,0.8)",                 // dark band
+          "0 24px 60px rgba(0,0,0,0.5)",               // main shadow
+          "0 8px 20px rgba(0,0,0,0.3)",                // close shadow
+          "inset 0 1px 0 rgba(255,255,255,0.08)",      // top gloss
+        ].join(", "),
+      }}>
+
+        {/* Power button — right */}
+        <div style={{ position: "absolute", right: -3, top: 90, width: 3, height: 56, borderRadius: "0 3px 3px 0", background: "linear-gradient(to right, #333, #222)" }} />
+        {/* Silent switch — left */}
+        <div style={{ position: "absolute", left: -3, top: 70, width: 3, height: 24, borderRadius: "3px 0 0 3px", background: "linear-gradient(to left, #333, #222)" }} />
+        {/* Volume up — left */}
+        <div style={{ position: "absolute", left: -3, top: 106, width: 3, height: 36, borderRadius: "3px 0 0 3px", background: "linear-gradient(to left, #333, #222)" }} />
+        {/* Volume down — left */}
+        <div style={{ position: "absolute", left: -3, top: 152, width: 3, height: 36, borderRadius: "3px 0 0 3px", background: "linear-gradient(to left, #333, #222)" }} />
+
+        {/* Screen bezel */}
+        <div style={{
+          borderRadius: 36,
+          overflow: "hidden",
+          background: "#000",
+          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.04)",
+        }}>
+          {/* Screen */}
+          <div style={{ height: 420, overflowY: "hidden", overflowX: "hidden", position: "relative", background: "#fff" }}>
+            <StatusBar light={statusLight} />
+            {children}
           </div>
-          {/* App content */}
-          {children}
         </div>
       </div>
     </div>
@@ -71,8 +122,8 @@ function Phone({
 function BookingApp() {
   return (
     <div className="flex flex-col bg-white h-full">
-      {/* Gradient header */}
-      <div style={{ background: "linear-gradient(135deg, #7C3AED 0%, #2563EB 100%)" }} className="px-4 pt-2 pb-5">
+      {/* Gradient header — status bar is part of gradient */}
+      <div style={{ background: "linear-gradient(135deg, #7C3AED 0%, #2563EB 100%)", marginTop: -1 }} className="px-4 pt-1 pb-5">
         <div className="flex items-center justify-between mb-3">
           <div>
             <p className="text-white/70 text-[9px]">Good morning</p>
@@ -313,48 +364,78 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* ── RIGHT: 3 Stacked Phones ─────────────── */}
-          <div className="flex-1 flex justify-center items-center" style={{ perspective: 1200, minHeight: 500 }}>
-            <div className="relative" style={{ width: 340, height: 480 }}>
+          {/* ── RIGHT: 3 Stacked iPhones ────────────── */}
+          <div
+            className="flex-1 flex justify-center items-center"
+            style={{ perspective: 1400, minHeight: 540 }}
+          >
+            <div className="relative" style={{ width: 380, height: 520 }}>
 
-              {/* Phone LEFT — back */}
+              {/* Phone LEFT — back, rotated -6deg */}
               <motion.div
-                className="absolute"
-                style={{ left: -20, top: 40, zIndex: 1, transformOrigin: "center center" }}
-                initial={{ opacity: 0, x: -40, rotateY: 12 }}
-                animate={{ opacity: 1, x: 0, rotateY: 12 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
+                style={{ position: "absolute", left: -10, top: 50, zIndex: 1, opacity: 0 }}
+                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.9, delay: 0.5, ease: "easeOut" }}
               >
-                <Phone style={{ transform: "rotateY(12deg) scale(0.85)", filter: "drop-shadow(0 30px 60px rgba(0,0,0,0.2))" }}>
-                  <DashboardApp />
-                </Phone>
+                <motion.div
+                  style={{ rotate: -6, scale: 0.84, transformOrigin: "bottom center" }}
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+                >
+                  <Phone statusLight={false}>
+                    <DashboardApp />
+                  </Phone>
+                </motion.div>
               </motion.div>
 
-              {/* Phone RIGHT — back */}
+              {/* Phone RIGHT — back, rotated +6deg */}
               <motion.div
-                className="absolute"
-                style={{ right: -20, top: 40, zIndex: 1 }}
-                initial={{ opacity: 0, x: 40, rotateY: -12 }}
-                animate={{ opacity: 1, x: 0, rotateY: -12 }}
-                transition={{ duration: 0.8, delay: 0.65 }}
+                style={{ position: "absolute", right: -10, top: 50, zIndex: 1 }}
+                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, x: 50 }}
+                transition={{ duration: 0.9, delay: 0.65, ease: "easeOut" }}
               >
-                <Phone style={{ transform: "rotateY(-12deg) scale(0.85)", filter: "drop-shadow(0 30px 60px rgba(0,0,0,0.2))" }}>
-                  <FoodApp />
-                </Phone>
+                <motion.div
+                  style={{ rotate: 6, scale: 0.84, transformOrigin: "bottom center" }}
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
+                >
+                  <Phone statusLight={false}>
+                    <FoodApp />
+                  </Phone>
+                </motion.div>
               </motion.div>
 
-              {/* Phone CENTER — front */}
+              {/* Phone CENTER — front, slight 3deg tilt, bigger, purple shadow */}
               <motion.div
-                className="absolute"
-                style={{ left: "50%", top: 0, transform: "translateX(-50%)", zIndex: 2 }}
-                initial={{ opacity: 0, y: 40 }}
+                style={{ position: "absolute", left: "50%", top: 0, x: "-50%", zIndex: 2 }}
+                initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.35 }}
+                transition={{ duration: 0.9, delay: 0.3, ease: "easeOut" }}
               >
-                <Phone style={{ filter: "drop-shadow(0 40px 80px rgba(124,58,237,0.3))" }}>
-                  <BookingApp />
-                </Phone>
+                <motion.div
+                  style={{ rotate: 3, transformOrigin: "bottom center" }}
+                  animate={{ y: [0, -14, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  {/* Extra glow behind center phone */}
+                  <div style={{
+                    position: "absolute",
+                    inset: -20,
+                    borderRadius: 60,
+                    background: "radial-gradient(ellipse at 50% 70%, rgba(124,58,237,0.25) 0%, transparent 70%)",
+                    filter: "blur(20px)",
+                    zIndex: 0,
+                  }} />
+                  <div style={{ position: "relative", zIndex: 1 }}>
+                    <Phone statusLight>
+                      <BookingApp />
+                    </Phone>
+                  </div>
+                </motion.div>
               </motion.div>
+
             </div>
           </div>
 
