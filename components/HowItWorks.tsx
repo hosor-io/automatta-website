@@ -1,36 +1,37 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { MessageCircle, FileText, Code2, Rocket, type LucideIcon } from "lucide-react";
 
-const STEPS = [
-  { key: "step1", num: "01", Icon: MessageCircle, side: "left"  },
-  { key: "step2", num: "02", Icon: FileText,      side: "right" },
-  { key: "step3", num: "03", Icon: Code2,         side: "left"  },
-  { key: "step4", num: "04", Icon: Rocket,        side: "right" },
-] as const;
+const STEPS: { key: string; num: string; Icon: LucideIcon }[] = [
+  { key: "step1", num: "01", Icon: MessageCircle },
+  { key: "step2", num: "02", Icon: FileText },
+  { key: "step3", num: "03", Icon: Code2 },
+  { key: "step4", num: "04", Icon: Rocket },
+];
+
+const Arrow = ({ dir }: { dir: "right" | "down" }) =>
+  dir === "right" ? (
+    <div className="hidden md:flex items-center justify-center text-[#7C3AED] font-bold text-lg select-none">
+      →
+    </div>
+  ) : (
+    <div className="hidden md:flex col-start-3 row-start-1 items-center justify-center text-[#7C3AED] font-bold text-lg select-none self-center">
+      ↓
+    </div>
+  );
 
 export default function HowItWorks() {
   const t = useTranslations("howItWorks");
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start 0.8", "end 0.3"],
-  });
-
-  // Line draws from 0 → 1 as user scrolls through section
-  const lineScaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
     <section className="py-24 bg-[#F7F7F7] border-y border-[#E4E4E7]">
       <div className="max-w-[900px] mx-auto px-6">
 
-        {/* ── Header ─────────────────────────────────── */}
+        {/* Header */}
         <motion.div
-          className="text-center mb-20"
+          className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -41,159 +42,109 @@ export default function HowItWorks() {
           <h2 className="text-4xl font-semibold text-[#09090B]">{t("title")}</h2>
         </motion.div>
 
-        {/* ── Timeline ───────────────────────────────── */}
-        <div ref={containerRef} className="relative">
+        {/* ── Desktop: 2×2 grid with arrows ── */}
+        {/*
+          Grid columns: card | arrow | card | down-arrow
+          We use a 5-column grid: [card] [→] [card] [↓-spacer]
+          Row 1: 01, →, 02, ↓
+          Row 2: 03, →, 04
+        */}
+        <div className="hidden md:grid gap-y-4" style={{ gridTemplateColumns: "1fr 40px 1fr 40px" }}>
 
-          {/* ── Center vertical line (desktop) ── */}
-          <div
-            className="hidden md:block absolute left-1/2 top-0 bottom-0 -translate-x-1/2"
-            style={{ width: 2, zIndex: 0 }}
-          >
-            {/* Track (background dashes) */}
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: "repeating-linear-gradient(to bottom, #D4D4D8 0px, #D4D4D8 6px, transparent 6px, transparent 14px)",
-              }}
-            />
-            {/* Animated fill */}
-            <motion.div
-              className="absolute top-0 left-0 w-full origin-top"
-              style={{
-                scaleY: lineScaleY,
-                backgroundImage: "repeating-linear-gradient(to bottom, #7C3AED 0px, #7C3AED 6px, transparent 6px, transparent 14px)",
-                height: "100%",
-              }}
-            />
+          {/* Row 1 */}
+          <StepCard step={STEPS[0]} title={t("step1.title" as any)} body={t("step1.body" as any)} delay={0} />
+
+          {/* → between 01 and 02 */}
+          <div className="flex items-center justify-center text-[#7C3AED] text-xl font-bold select-none">→</div>
+
+          <StepCard step={STEPS[1]} title={t("step2.title" as any)} body={t("step2.body" as any)} delay={0.1} />
+
+          {/* ↓ on far right spanning both rows */}
+          <div className="row-span-2 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-1 text-[#7C3AED]">
+              <div className="w-px flex-1 bg-[#7C3AED]/30" style={{ minHeight: 32 }} />
+              <span className="text-xl font-bold select-none leading-none">↓</span>
+              <div className="w-px flex-1 bg-[#7C3AED]/30" style={{ minHeight: 32 }} />
+            </div>
           </div>
 
-          {/* ── Left timeline line (mobile) ── */}
-          <div
-            className="md:hidden absolute left-5 top-0 bottom-0"
-            style={{ width: 2, zIndex: 0 }}
-          >
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: "repeating-linear-gradient(to bottom, #D4D4D8 0px, #D4D4D8 6px, transparent 6px, transparent 14px)",
-              }}
-            />
-            <motion.div
-              className="absolute top-0 left-0 w-full origin-top"
-              style={{
-                scaleY: lineScaleY,
-                backgroundImage: "repeating-linear-gradient(to bottom, #7C3AED 0px, #7C3AED 6px, transparent 6px, transparent 14px)",
-                height: "100%",
-              }}
-            />
-          </div>
+          {/* Gap row */}
+          <div />
+          <div />
+          <div />
 
-          {/* ── Steps ── */}
-          <div className="flex flex-col gap-12 md:gap-16">
-            {STEPS.map(({ key, num, Icon, side }, i) => {
-              const isLeft = side === "left";
-              return (
-                <motion.div
-                  key={key}
-                  className="relative flex items-center"
-                  initial={{ opacity: 0, y: 28 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.5, delay: i * 0.15 }}
-                >
-                  {/* ── Node on center line (desktop) ── */}
-                  <div
-                    className="hidden md:flex absolute left-1/2 -translate-x-1/2 w-10 h-10 rounded-full items-center justify-center z-10 shrink-0"
-                    style={{
-                      background: "linear-gradient(135deg, #7C3AED 0%, #2563EB 100%)",
-                      boxShadow: "0 0 0 4px #F7F7F7, 0 0 0 6px #7C3AED33",
-                    }}
-                  >
-                    <span className="text-white text-[11px] font-black">{num}</span>
-                  </div>
+          {/* Row 2 */}
+          <StepCard step={STEPS[2]} title={t("step3.title" as any)} body={t("step3.body" as any)} delay={0.2} />
 
-                  {/* ── Node on left line (mobile) ── */}
-                  <div
-                    className="md:hidden flex absolute left-5 -translate-x-1/2 w-8 h-8 rounded-full items-center justify-center z-10 shrink-0"
-                    style={{
-                      background: "linear-gradient(135deg, #7C3AED 0%, #2563EB 100%)",
-                      boxShadow: "0 0 0 3px #F7F7F7, 0 0 0 5px #7C3AED33",
-                    }}
-                  >
-                    <span className="text-white text-[10px] font-black">{num}</span>
-                  </div>
+          <div className="flex items-center justify-center text-[#7C3AED] text-xl font-bold select-none">→</div>
 
-                  {/* ── Card grid (desktop zigzag) ── */}
-                  <div className="w-full hidden md:grid grid-cols-2 gap-0">
-                    {/* Left slot */}
-                    <div className={`pr-12 ${isLeft ? "block" : ""}`}>
-                      {isLeft && <StepCard num={num} Icon={Icon} title={t(`${key}.title` as any)} body={t(`${key}.body` as any)} align="right" />}
-                    </div>
-                    {/* Right slot */}
-                    <div className={`pl-12 ${!isLeft ? "block" : ""}`}>
-                      {!isLeft && <StepCard num={num} Icon={Icon} title={t(`${key}.title` as any)} body={t(`${key}.body` as any)} align="left" />}
-                    </div>
-                  </div>
-
-                  {/* ── Card (mobile) ── */}
-                  <div className="md:hidden pl-14 w-full">
-                    <StepCard num={num} Icon={Icon} title={t(`${key}.title` as any)} body={t(`${key}.body` as any)} align="left" />
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+          <StepCard step={STEPS[3]} title={t("step4.title" as any)} body={t("step4.body" as any)} delay={0.3} />
         </div>
+
+        {/* ── Mobile: single column ── */}
+        <div className="md:hidden flex flex-col gap-4">
+          {STEPS.map((step, i) => (
+            <StepCard
+              key={step.key}
+              step={step}
+              title={t(`${step.key}.title` as any)}
+              body={t(`${step.key}.body` as any)}
+              delay={i * 0.1}
+            />
+          ))}
+        </div>
+
       </div>
     </section>
   );
 }
 
 function StepCard({
-  num,
-  Icon,
+  step,
   title,
   body,
-  align,
+  delay,
 }: {
-  num: string;
-  Icon: LucideIcon;
+  step: { key: string; num: string; Icon: LucideIcon };
   title: string;
   body: string;
-  align: "left" | "right";
+  delay: number;
 }) {
+  const { num, Icon } = step;
   return (
     <motion.div
-      className="group relative rounded-2xl border border-[#E4E4E7] bg-white p-6 cursor-default shadow-sm"
-      whileHover={{ scale: 1.02, borderColor: "#7C3AED" }}
-      transition={{ type: "spring", stiffness: 300, damping: 22 }}
-      style={{ textAlign: align }}
+      className="group relative bg-white rounded-2xl p-6 shadow-sm cursor-default overflow-hidden"
+      style={{ borderLeft: "3px solid #7C3AED" }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.45, delay }}
+      whileHover={{ backgroundColor: "#FAFAFA", borderColor: "#6D28D9" }}
     >
-      {/* Subtle top-left glow on hover */}
-      <div
-        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.06) 0%, transparent 70%)" }}
+      {/* Subtle inner glow on hover */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
+        style={{ background: "radial-gradient(ellipse at 0% 0%, rgba(124,58,237,0.05) 0%, transparent 60%)" }}
       />
 
-      {/* Step number */}
-      <span
-        className="block text-4xl font-black mb-3 leading-none"
-        style={{
-          background: "linear-gradient(135deg, #7C3AED33 0%, #2563EB22 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-        }}
-      >
-        {num}
-      </span>
-
-      {/* Icon */}
-      <div
-        className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${align === "right" ? "ml-auto" : ""}`}
-        style={{ background: "linear-gradient(135deg, #7C3AED1A 0%, #2563EB1A 100%)" }}
-      >
-        <Icon size={20} className="text-[#7C3AED]" />
+      {/* Top row: number left, icon right */}
+      <div className="flex items-start justify-between mb-4">
+        <span
+          className="text-3xl font-black leading-none"
+          style={{
+            background: "linear-gradient(135deg, #7C3AED 0%, #2563EB 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
+        >
+          {num}
+        </span>
+        <div
+          className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+          style={{ background: "linear-gradient(135deg, #7C3AED15, #2563EB15)" }}
+        >
+          <Icon size={18} className="text-[#7C3AED]" />
+        </div>
       </div>
 
       {/* Title */}
